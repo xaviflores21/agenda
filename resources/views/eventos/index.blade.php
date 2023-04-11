@@ -189,11 +189,17 @@
             
           <div class="form-row">
             <div class="form-group col-md-8">
-                <label>
-                    Encargada:
-                </label>
-                <input type="text" class="form-control" name="txtTitulo" id="txtTitulo">
+            <label for="exampleDataList" class="form-label">Encargada</label>
+            <input class="form-control" list="datalistOptions" id="exampleDataList" placeholder="Type to search...">
+                <datalist id="datalistOptions">
+                    <option value="San Francisco">
+                    <option value="New York">
+                    <option value="Seattle">
+                    <option value="Los Angeles">
+                    <option value="Chicago">
+                </datalist>
             </div>
+            
             <div class="form-group col-md-4">
                 <label>
                     Hora:
