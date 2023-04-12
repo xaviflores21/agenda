@@ -26,7 +26,8 @@
 </script>
 
 <!-- <script src="{{asset('js/main.js')}}" defer></script> -->
-<script>document.addEventListener('DOMContentLoaded',function(){
+<script>
+    document.addEventListener('DOMContentLoaded',function(){
     var calendarEl=document.getElementById('calendar');
     var calendar=new FullCalendar.Calendar(calendarEl,{
       
@@ -55,7 +56,7 @@
         },
         dateClick:function(info){
             limpiarFormulario();
-            $('#txtFecha').val(info.dateStr)
+            $('#txtFecha').val(info.dateStr);      
             $("#btnAgregar").prop("disabled",false);
             $("#btnModificar").prop("disabled",true);
             $("#btnEliminar").prop("disabled",true);
@@ -65,13 +66,16 @@
             $("#btnAgregar").prop("disabled",true);
             $("#btnModificar").prop("disabled",false);
             $("#btnEliminar").prop("disabled",false);
-            console.log(info);
-            console.log(info.event.title)
+            console.log(info.event);
+            console.log("Aquie arriba esta el info")
+            console.log(info.event.extendedProps.encargada)
             console.log(info.event.start)
             console.log(info.event.extendedProps.descripcion)
             $('#txtID').val(info.event.id),
-            $('#txtTitulo').val(info.event.title),
-            
+            $('#exampleDataList').val(info.event.extendedProps.encargada),
+            $('#txtCliente').val(info.event.extendedProps.cliente),
+            $('#txtHabitacion').val(info.event.extendedProps.habitacion),
+
             mes =(info.event.start.getMonth()+1);
             dia=(info.event.start.getDate());
             anio=(info.event.start.getFullYear());
@@ -91,16 +95,19 @@
             $('#txtHora').val(horario),
             $('#txtColor').val(info.event.backgroundColor),
 
-            $('#txtDescripcion').val(info.event.extendedProps.descripcion),
+            $('#txtServicio').val(info.event.extendedProps.servicio),
 
             $('#exampleModal').modal('show')
         }, 
-        events:url_show
+        events:url_show,
+        
+        
         //"{{url('/eventos/show')}}"
 
     });
     calendar.setOption('locale','Es')
     calendar.render();
+    
 
     $('#btnAgregar').click(function(){
         ObjEvento=recolectarDatosGUI("POST");
@@ -123,8 +130,10 @@
     function recolectarDatosGUI(method){
         nuevoEvento={
             id:$('#txtID').val(),
-            title:$('#txtTitulo').val(),
-            descripcion:$('#txtDescripcion').val(),
+            encargada:$('#exampleDataList').val(),
+            cliente:$('#txtCliente').val(),
+            habitacion:$('#txtHabitacion').val(),
+            servicio:$('#txtServicio').val(),
             color:$('#txtColor').val(),
             textColor:'#FFFFFF',
             start:$('#txtFecha').val()+" "+$('#txtHora').val(),
@@ -152,11 +161,13 @@
     }
     function limpiarFormulario(){
             $('#txtID').val(""),
-            $('#txtTitulo').val(""),
+            $('#exampleDataList').val(""),
+            $('#txtCliente').val(""),
+            $('#txtHabitacion').val(""),
             $('#txtFecha').val(""),
             $('#txtHora').val("07:00"),
             $('#txtColor').val(""),
-            $('#txtDescripcion').val("");
+            $('#txtServicio').val("");
     }
     console.log("{{url('/eventos')}}")
 })</script>
@@ -190,7 +201,7 @@
           <div class="form-row">
             <div class="form-group col-md-8">
             <label for="exampleDataList" class="form-label">Encargada</label>
-            <input class="form-control" list="datalistOptions" id="exampleDataList" placeholder="Type to search...">
+            <input class="form-control" list="datalistOptions" id="exampleDataList" name="exampleDataList" placeholder="Type to search...">
                 <datalist id="datalistOptions">
                     <option value="San Francisco">
                     <option value="New York">
@@ -222,7 +233,7 @@
                 <label>
                     Servicio:
                 </label>
-                <textarea name="txtDescripcion" class="form-control" id="txtDescripcion" cols="30" rows="3"></textarea>
+                <textarea name="txtServicio" class="form-control" id="txtServicio" cols="30" rows="3"></textarea>
             </div>
           
             <div class="form-group col-md-12">

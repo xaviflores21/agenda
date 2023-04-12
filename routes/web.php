@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Route;
 
 
 
-Auth::routes(['register'=>false,'reset'=>false,'verify'=>false]);
+Auth::routes(['register'=>true,'reset'=>true,'verify'=>true]);
 Route::get('/','App\Http\Controllers\EventosController@index')->middleware('auth');
 Route::resource('eventos','App\Http\Controllers\EventosController')->middleware('auth');
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
