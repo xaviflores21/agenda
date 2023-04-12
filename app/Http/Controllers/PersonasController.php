@@ -11,11 +11,10 @@ class PersonasController extends Controller
      * Display a listing of the resource.
      */
     public function index()
-    {
-        //
-        
-        return view('personas/index');
-    }
+{
+    $personas = Personas::all();
+    return view("eventos/index", ['personas' => $personas]);
+}
 
     /**
      * Show the form for creating a new resource.

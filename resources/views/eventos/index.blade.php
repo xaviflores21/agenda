@@ -202,10 +202,11 @@
             <label for="exampleDataList" class="form-label">Encargada</label>
             <input class="form-control" list="datalistOptions" id="txtTitle" name="txtTitle" placeholder="Type to search...">
                 <datalist id="datalistOptions">
-                   <option value="ASIES"></option>
-                   <option value="asdasd"></option>
-                   <option value="ASIasdasES"></option>
-                   <option value="qweQWEQWEQW"></option>
+                @foreach($personas as $personas)
+                 
+                <option value="{{$personas->nombreCompleto}}">
+        
+                @endforeach
                 </datalist>
             </div>
             
@@ -245,6 +246,7 @@
        
           
           </div>
+          
         </div>
         <div class="modal-footer">
         <button id="btnAgregar" class="btn btn-success">Agregar</button>
