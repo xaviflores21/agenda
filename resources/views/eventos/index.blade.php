@@ -68,11 +68,10 @@
             $("#btnEliminar").prop("disabled",false);
             console.log(info.event);
             console.log("Aquie arriba esta el info")
-            console.log(info.event.extendedProps.encargada)
             console.log(info.event.start)
             console.log(info.event.extendedProps.descripcion)
             $('#txtID').val(info.event.id),
-            $('#exampleDataList').val(info.event.extendedProps.encargada),
+            $('#txtTitle').val(info.event.title),
             $('#txtCliente').val(info.event.extendedProps.cliente),
             $('#txtHabitacion').val(info.event.extendedProps.habitacion),
 
@@ -130,7 +129,7 @@
     function recolectarDatosGUI(method){
         nuevoEvento={
             id:$('#txtID').val(),
-            encargada:$('#exampleDataList').val(),
+            title:$('#txtTitle').val(),
             cliente:$('#txtCliente').val(),
             habitacion:$('#txtHabitacion').val(),
             servicio:$('#txtServicio').val(),
@@ -161,7 +160,7 @@
     }
     function limpiarFormulario(){
             $('#txtID').val(""),
-            $('#exampleDataList').val(""),
+            $('#txtTitle').val(""),
             $('#txtCliente').val(""),
             $('#txtHabitacion').val(""),
             $('#txtFecha').val(""),
@@ -201,13 +200,12 @@
           <div class="form-row">
             <div class="form-group col-md-8">
             <label for="exampleDataList" class="form-label">Encargada</label>
-            <input class="form-control" list="datalistOptions" id="exampleDataList" name="exampleDataList" placeholder="Type to search...">
+            <input class="form-control" list="datalistOptions" id="txtTitle" name="txtTitle" placeholder="Type to search...">
                 <datalist id="datalistOptions">
-                    <option value="San Francisco">
-                    <option value="New York">
-                    <option value="Seattle">
-                    <option value="Los Angeles">
-                    <option value="Chicago">
+                   <option value="ASIES"></option>
+                   <option value="asdasd"></option>
+                   <option value="ASIasdasES"></option>
+                   <option value="qweQWEQWEQW"></option>
                 </datalist>
             </div>
             
