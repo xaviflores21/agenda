@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\personas;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class PersonasController extends Controller
 {
@@ -70,6 +71,9 @@ class PersonasController extends Controller
     }
     public function addName(Request $request)
     {
+        if (!Auth::user()->isAdmin()) {
+            abort(403, 'Unauthorized action.');
+        }
         $personas = new personas();
         $personas->nombreCompleto = $request->input('nombreCompleto');
         $personas->save();

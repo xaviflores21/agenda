@@ -8,7 +8,11 @@ use App\Models\User;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
-
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Foundation\Auth\RedirectsUsers;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\ValidationException;
 class RegisterController extends Controller
 {
     /*
@@ -53,6 +57,7 @@ class RegisterController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'role' => ['required','string'], // each role should be a string
         ]);
     }
 
@@ -64,10 +69,18 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
+        $adminCount = User::where('role', 'admin')->count();
+
+        if ($adminCount > 0 && $data['role'] === 'admin') {
+            throw ValidationException::withMessages(['role' => 'Only one admin is allowed']);
+        }
         return User::create([
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
+            'role'=>$data['role']
         ]);
+       
+        
     }
 }
