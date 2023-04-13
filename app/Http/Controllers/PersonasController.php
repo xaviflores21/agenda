@@ -68,5 +68,12 @@ class PersonasController extends Controller
     {
         //
     }
+    public function addName(Request $request)
+    {
+        $personas = new personas();
+        $personas->nombreCompleto = $request->input('nombreCompleto');
+        $personas->save();
+        return redirect()->back()->with('success', 'Name added successfully.');
+    }
     
 }

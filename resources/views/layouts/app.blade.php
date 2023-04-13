@@ -21,9 +21,9 @@
     <div id="app">
         <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
             <div class="container">
-                <a class="navbar-brand" href="{{ url('/') }}">
-                    {{ config('app.name', 'Laravel') }}
-                </a>
+            <a class="navbar-brand" href="{{ url('/') }}">
+                <img src="{{ asset('/logo/losTajibos.png') }}" alt="Logo" style="width: 25%;">
+            </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
                     <span class="navbar-toggler-icon"></span>
                 </button>
@@ -67,11 +67,42 @@
                                     </form>
                                 </div>
                             </li>
+                            @auth
+                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addModal">Añadir</button>
+
+<!-- Modal -->
+<div class="modal fade" id="addModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Añadir Personal</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form method="POST" action="{{ route('personas.addName') }}">
+          @csrf
+          <div class="mb-3">
+            <label for="nombreCompleto" class="form-label">Nombre Completo</label>
+            <input type="text" class="form-control" id="nombreCompleto" name="nombreCompleto" required>
+          </div>
+          <button type="submit" class="btn btn-primary">Añadir personal</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+@endauth
                         @endguest
                     </ul>
                 </div>
             </div>
+         
+
         </nav>
+        
+        
+        
+
 
         <main class="py-4">
             <div class="container">
