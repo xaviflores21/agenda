@@ -33,67 +33,70 @@
                     <ul class="navbar-nav me-auto">
 
                     </ul>
+<!-- Right Side Of Navbar -->
+<ul class="navbar-nav ms-auto">
+    <!-- Authentication Links -->
+@if (Route::has('login'))
+    @auth
+        <li class="nav-item dropdown">
+            <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                {{ Auth::user()->name }}
+            </a>
 
-                    <!-- Right Side Of Navbar -->
-                    <ul class="navbar-nav ms-auto">
-                        <!-- Authentication Links -->
-                        @guest
-                            @if (Route::has('login'))
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
-                                </li>
-                            @endif
+            <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                <a class="dropdown-item" href="{{ route('logout') }}"
+                   onclick="event.preventDefault();
+                                 document.getElementById('logout-form').submit();">
+                    {{ __('Logout') }}
+                </a>
 
-                            @if (Route::has('register'))
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
-                                </li>
-                            @endif
-                        @else
-                            <li class="nav-item dropdown">
-                                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                    {{ Auth::user()->name }}
-                                </a>
+                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                    @csrf
+                </form>
+            </div>
+        </li>
+        @auth
+        @if(Auth::user()->role == 'admin')
+        <li class="nav-item">
+            <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
+        </li>
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addModal">Añadir</button>
+        
+        <!-- Modal -->
+        <div class="modal fade" id="addModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Añadir Personal</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form method="POST" action="{{ route('personas.addName') }}">
+                            @csrf
+                            <div class="mb-3">
+                                <label for="nombreCompleto" class="form-label">Nombre Completo</label>
+                                <input type="text" class="form-control" id="nombreCompleto" name="nombreCompleto" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Añadir personal</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        @endif
+        @endauth
+    @else
+        <li class="nav-item">
+            <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
+        </li>
+    @endauth
+@endif
 
-                                <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" href="{{ route('logout') }}"
-                                       onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
-                                        {{ __('Logout') }}
-                                    </a>
+</ul>
 
-                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                                        @csrf
-                                    </form>
-                                </div>
-                            </li>
-                            @auth
-                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addModal">Añadir</button>
-
-<!-- Modal -->
-<div class="modal fade" id="addModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Añadir Personal</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <form method="POST" action="{{ route('personas.addName') }}">
-          @csrf
-          <div class="mb-3">
-            <label for="nombreCompleto" class="form-label">Nombre Completo</label>
-            <input type="text" class="form-control" id="nombreCompleto" name="nombreCompleto" required>
-          </div>
-          <button type="submit" class="btn btn-primary">Añadir personal</button>
-        </form>
-      </div>
-    </div>
-  </div>
-</div>
-@endauth
-                        @endguest
-                    </ul>
                 </div>
             </div>
          

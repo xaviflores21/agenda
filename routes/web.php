@@ -24,5 +24,8 @@ Route::post('/personas/addName', [App\Http\Controllers\PersonasController::class
 //Con estos controladores manejo donde se sua la apgina con personas
 Route::resource('/','App\Http\Controllers\PersonasController')->middleware('auth');
 
+//ADMINROUTE
+Route::get('/admin/login', [App\Http\Controllers\Auth\AdminLoginController::class, 'showLoginForm'])->name('admin.login');
+Route::post('/admin/login', [App\Http\Controllers\Auth\AdminLoginController::class, 'login'])->name('admin.login.submit');
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
