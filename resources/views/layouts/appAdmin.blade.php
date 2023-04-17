@@ -42,10 +42,8 @@
                                 <li class="nav-item">
                                     <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
                                 </li>
-                            @endif
-                                  
-    @endguest
-                           
+                                <!-- Registrar Entraria Aqui con un link¡¡¡ -->
+                            @endif  
                         @else
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
@@ -64,9 +62,6 @@
                                     </form>
                                 </div>
                             </li>
-                            @auth
-                      
-@endauth
                         @endguest
                     </ul>
                 </div>
@@ -75,10 +70,6 @@
 
         </nav>
         
-        
-        
-
-
         <main class="py-4">
             <div class="container">
             @yield('content')

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Gate;
 use App\Providers\RouteServiceProvider;
 use App\Models\User;
 use Illuminate\Foundation\Auth\RegistersUsers;
@@ -27,7 +28,11 @@ class RegisterController extends Controller
     */
 
     use RegistersUsers;
-
+    protected function registered(Request $request, $user)
+    {
+        Auth::logout();
+        return redirect()->route('login')->with('success', 'Registration successful. Please log in to continue.');
+    }
     /**
      * Where to redirect users after registration.
      *
@@ -69,6 +74,10 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
+        // Check if the currently logged in user is an admin
+    if (!Auth::user() || !Auth::user()->isAdmin()) {
+        abort(403, 'Unauthorized action.');
+    }
         $adminCount = User::where('role', 'admin')->count();
 
         if ($adminCount > 0 && $data['role'] === 'admin') {
@@ -83,4 +92,6 @@ class RegisterController extends Controller
        
         
     }
+    
+    
 }

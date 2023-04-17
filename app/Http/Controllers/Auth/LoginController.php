@@ -27,7 +27,7 @@ class LoginController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = RouteServiceProvider::HOME;
+    protected $redirectTo = '/public';
 
     /**
      * Create a new controller instance.
@@ -46,7 +46,7 @@ class LoginController extends Controller
         } elseif ($user->role == 'boss') {
             return '/boss/dashboard'; // Replace this with your boss dashboard route
         } else {
-            return '/home';
+            return '/';
         }
     }
 }

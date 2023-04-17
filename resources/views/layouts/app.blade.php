@@ -57,9 +57,11 @@
         </li>
         @auth
         @if(Auth::user()->role == 'admin')
+        @if (Route::currentRouteName() != 'login')
         <li class="nav-item">
             <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
         </li>
+        @endif
         <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addModal">Añadir</button>
         
         <!-- Modal -->
@@ -90,7 +92,9 @@
             <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
         </li>
         <li class="nav-item">
+        @if (Route::currentRouteName() != 'login') <!-- add this conditional statement -->
             <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
+            @endif
         </li>
     @endauth
 @endif

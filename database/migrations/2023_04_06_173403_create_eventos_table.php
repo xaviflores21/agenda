@@ -18,6 +18,7 @@ return new class extends Migration
             $table->integer('habitacion');
             $table->text('servicio');
             $table->string('color',20);
+            $table->char('estado',1);
             $table->string('textColor',20);
             $table->dateTime('start');
             $table->dateTime('end');

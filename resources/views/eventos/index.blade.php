@@ -134,6 +134,7 @@
             habitacion:$('#txtHabitacion').val(),
             servicio:$('#txtServicio').val(),
             color:$('#txtColor').val(),
+            
             textColor:'#FFFFFF',
             start:$('#txtFecha').val()+" "+$('#txtHora').val(),
             end:$('#txtFecha').val()+" "+$('#txtHora').val(),
@@ -200,7 +201,7 @@
           <div class="form-row">
             <div class="form-group col-md-8">
             <label for="exampleDataList" class="form-label">Encargada</label>
-            <input class="form-control" list="datalistOptions" id="txtTitle" name="txtTitle" placeholder="Type to search...">
+            <input class="form-control" list="datalistOptions" id="txtTitle" name="txtTitle" placeholder="Seleccione persona a cargo...">
                 <datalist id="datalistOptions">
                 @foreach($personas as $personas)
                  
@@ -251,7 +252,10 @@
         <div class="modal-footer">
         <button id="btnAgregar" class="btn btn-success">Agregar</button>
         <button id="btnModificar" class="btn btn-warning">Modificar</button>
+        @if(Auth::user()->role=='admin')
         <button id="btnEliminar" class="btn btn-danger">Borrar</button>
+        @endif
+        
         <button id="btnCancelar" data-bs-dismiss="modal" class="btn btn-default">Cancelar</button>
       
         </div>
