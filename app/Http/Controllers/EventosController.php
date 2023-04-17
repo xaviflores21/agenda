@@ -41,8 +41,8 @@ class EventosController extends Controller
     public function show(string $id)
     {
         //
-        $data['eventos']=evento::all();
-        return response()->json($data['eventos']);
+        $data['eventos'] = evento::where('estado', 'C')->get();
+    return response()->json($data['eventos']);
     }
 
     /**
@@ -70,8 +70,9 @@ class EventosController extends Controller
     public function destroy(string $id)
     {
         //
-        $eventos=evento::findOrFail($id);
-        evento::destroy($id);
-        return response()->json($id);
+        $evento = evento::findOrFail($id);
+    $evento->estado = 'E';
+    $evento->save();
+    return response()->json($evento);
     }
 }

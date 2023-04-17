@@ -134,7 +134,7 @@
             habitacion:$('#txtHabitacion').val(),
             servicio:$('#txtServicio').val(),
             color:$('#txtColor').val(),
-            
+            estado:'C',
             textColor:'#FFFFFF',
             start:$('#txtFecha').val()+" "+$('#txtHora').val(),
             end:$('#txtFecha').val()+" "+$('#txtHora').val(),
