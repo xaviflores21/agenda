@@ -2,21 +2,20 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\personas;
 use Illuminate\Http\Request;
-use Faker\Factory as Faker;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Evento;
+use App\Models\User;
 
-class PersonasController extends Controller
+class reporteController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
-{
-    $personas = Personas::all();
-    return view("eventos/index", ['personas' => $personas]);
-}
+    {
+        //
+    }
 
     /**
      * Show the form for creating a new resource.
@@ -24,7 +23,6 @@ class PersonasController extends Controller
     public function create()
     {
         //
-        
     }
 
     /**
@@ -33,8 +31,6 @@ class PersonasController extends Controller
     public function store(Request $request)
     {
         //
-        $datosPersona=request()->all();
-        print_r($datosPersona);
     }
 
     /**
@@ -43,8 +39,6 @@ class PersonasController extends Controller
     public function show(string $id)
     {
         //
-        $data['personas']=personas::all();
-        return response()->json($data['personas']);
     }
 
     /**
@@ -70,20 +64,4 @@ class PersonasController extends Controller
     {
         //
     }
-    
-public function addName(Request $request)
-{
-    if (!Auth::user()->isAdmin()) {
-        abort(403, 'Unauthorized action.');
-    }
-
-    $faker = Faker::create();
-    $personas = new personas();
-    $personas->nombreCompleto = $request->input('nombreCompleto');
-    $personas->color = $faker->hexColor;
-    $personas->save();
-
-    return redirect()->back()->with('success', 'Name added successfully.');
-}
-    
 }

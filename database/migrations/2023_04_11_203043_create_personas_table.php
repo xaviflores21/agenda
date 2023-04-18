@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('personas', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('nombreCompleto',80);
+            $table->string('color',20);
             $table->timestamps();
 
         });

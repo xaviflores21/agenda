@@ -16,7 +16,7 @@ class personas extends Model
     protected $fillable = [
         'id',
         'nombreCompleto',
-        
+        'color'
     ];
 
 }

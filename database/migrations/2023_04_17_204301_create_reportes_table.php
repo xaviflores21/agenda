@@ -14,9 +14,9 @@ return new class extends Migration
         Schema::create('reportes', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->integer('idUser');
-            $table->string('UserNombre',255);
+            $table->string('userNombre',255);
             $table->integer('idEvento');
-            $table->string('EncargadaEvento',255);
+            $table->string('encargadaEvento',255);
             $table->string('cliente',255);
             $table->integer('habitacion')->nullable();
             $table->text('servicio');

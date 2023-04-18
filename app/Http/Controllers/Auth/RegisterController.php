@@ -74,24 +74,36 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        // Check if the currently logged in user is an admin
-    if (!Auth::user() || !Auth::user()->isAdmin()) {
-        abort(403, 'Unauthorized action.');
-    }
+        // Check if there is already an admin user
         $adminCount = User::where('role', 'admin')->count();
-
+    
         if ($adminCount > 0 && $data['role'] === 'admin') {
             throw ValidationException::withMessages(['role' => 'Only one admin is allowed']);
         }
+    
+        // If there is no admin user, allow registration
+        if ($adminCount === 0) {
+            return User::create([
+                'name' => $data['name'],
+                'email' => $data['email'],
+                'password' => Hash::make($data['password']),
+                'role' => $data['role']
+            ]);
+        }
+    
+        // If there is an admin user, check if the current user is an admin
+        if (!Auth::user() || !Auth::user()->isAdmin()) {
+            abort(403, 'Unauthorized action.');
+        }
+    
         return User::create([
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
-            'role'=>$data['role']
+            'role' => $data['role']
         ]);
-       
-        
     }
+    
     
     
 }

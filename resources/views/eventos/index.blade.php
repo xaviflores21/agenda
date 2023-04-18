@@ -205,7 +205,7 @@
                 <datalist id="datalistOptions">
                 @foreach($personas as $personas)
                  
-                <option value="{{$personas->nombreCompleto}}">
+                <option value="{{$personas->nombreCompleto}}" data-color="{{$personas->color}}">
         
                 @endforeach
                 </datalist>
@@ -240,10 +240,25 @@
                 <label>
                     Color:
                 </label>
+                
                 <input type="color" class="form-control" name="txtColor" id="txtColor">
             </div>
             
-          
+            <script>// Get the txtTitle and txtColor inputs
+                var txtTitle = document.getElementById('txtTitle');
+                var txtColor = document.getElementById('txtColor');
+
+                // Add an event listener to the txtTitle input
+                txtTitle.addEventListener('change', function() {
+                // Get the selected option from the datalist
+                var selectedOption = document.querySelector('#datalistOptions option[value="' + this.value + '"]');
+
+                // Set the color value of the selected option to the txtColor input
+                if (selectedOption) {
+                    txtColor.value = selectedOption.dataset.color;
+                }
+                });
+            </script>
        
           
           </div>
