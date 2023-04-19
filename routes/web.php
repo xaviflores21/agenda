@@ -29,3 +29,9 @@ Route::get('/admin/login', [App\Http\Controllers\Auth\AdminLoginController::clas
 Route::post('/admin/login', [App\Http\Controllers\Auth\AdminLoginController::class, 'login'])->name('admin.login.submit');
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+//Reporte
+Route::middleware(['auth', 'isAdmin'])->group(function () {
+    Route::resource('reporte', 'App\Http\Controllers\reporteController');
+});
+Route::post('/reporte/enviar',  [App\Http\Controllers\reporteController::class, 'EnviarReporteInformacion'])->name('reporte.enviar');
+

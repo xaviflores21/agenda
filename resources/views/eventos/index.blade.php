@@ -22,6 +22,7 @@
 
 <script>
     let url_eventos="{{url('/eventos')}}";
+    let url_reporte="{{url('/reporte')}}";
     let url_show="{{url('/eventos/show')}}";
 </script>
 
@@ -66,10 +67,6 @@
             $("#btnAgregar").prop("disabled",true);
             $("#btnModificar").prop("disabled",false);
             $("#btnEliminar").prop("disabled",false);
-            console.log(info.event);
-            console.log("Aquie arriba esta el info")
-            console.log(info.event.start)
-            console.log(info.event.extendedProps.descripcion)
             $('#txtID').val(info.event.id),
             $('#txtTitle').val(info.event.title),
             $('#txtCliente').val(info.event.extendedProps.cliente),
@@ -111,19 +108,22 @@
     $('#btnAgregar').click(function(){
         ObjEvento=recolectarDatosGUI("POST");
         EnviarInformacion('',ObjEvento);
+        estado="C";
        
     });
 
     $('#btnEliminar').click(function(){
         ObjEvento=recolectarDatosGUI("DELETE");
         EnviarInformacion('/'+$('#txtID').val(),ObjEvento);
-       
+        estado="E";
+        EnviarReporteInformacion("",ObjEvento,estado)
     });
 
     $('#btnModificar').click(function(){
         ObjEvento=recolectarDatosGUI("PATCH");
         EnviarInformacion('/'+$('#txtID').val(),ObjEvento);
-       
+        estado="M";
+        EnviarReporteInformacion("",ObjEvento,estado)
     });
 
     function recolectarDatosGUI(method){
@@ -142,7 +142,7 @@
             '_method':method
         }
         return(nuevoEvento)
-        console.log(nuevoEvento)
+        
     }
 
     function EnviarInformacion(accion,objEvento){
@@ -154,11 +154,33 @@
                 console.log(msg);
                 $('#exampleModal').modal('toggle'); 
                 calendar.refetchEvents( );
+                console.log("EVENTO OBJEC:" + objEvento._method );
+               
+                //StoreReporte
+               
             },
             error:function(){alert("Hay un error");}
         });
         
     }
+    function EnviarReporteInformacion(accion, objEvento,estado) {
+           
+            $.ajax({
+            type: "POST",
+            url: "{{ route('reporte.enviar') }}",
+            data: {
+        '_token': '{{ csrf_token() }}',
+        'objEvento': objEvento,
+        'estado': estado
+    },
+    success: function(msg) {
+        console.log("Success reporte: ", msg);
+    },
+    error: function(xhr, status, error) {
+        console.error("Error reporte: ", error);
+    }
+});
+        }
     function limpiarFormulario(){
             $('#txtID').val(""),
             $('#txtTitle').val(""),

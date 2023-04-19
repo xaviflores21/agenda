@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\evento;
+use App\Models\personas;
 use Illuminate\Http\Request;
 
 class EventosController extends Controller
@@ -13,7 +14,8 @@ class EventosController extends Controller
     public function index()
     {
         //
-        return view("eventos/index");
+        $personas = Personas::all();
+        return view('eventos/index', compact('personas'));
     }
 
     /**
@@ -42,7 +44,7 @@ class EventosController extends Controller
     {
         //
         $data['eventos'] = evento::where('estado', 'C')->get();
-    return response()->json($data['eventos']);
+        return response()->json($data['eventos']);
     }
 
     /**
@@ -71,8 +73,8 @@ class EventosController extends Controller
     {
         //
         $evento = evento::findOrFail($id);
-    $evento->estado = 'E';
-    $evento->save();
-    return response()->json($evento);
-    }
+        $evento->estado = 'E';
+        $evento->save();
+        return response()->json($evento);
+        }
 }
