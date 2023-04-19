@@ -13,15 +13,56 @@ class reporteController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         $this->middleware('auth');
-        $reportes = reporte::all();
-
+        
+        $query = reporte::query();
+    
+        // If search term is provided, filter the results
+        if ($request->has('search')) {
+            $searchTerm = $request->input('search');
+            $query->where(function($q) use ($searchTerm) {
+                $q->where('userNombre', 'like', '%'.$searchTerm.'%')
+                  ->orWhere('encargadaEvento', 'like', '%'.$searchTerm.'%')
+                  ->orWhere('cliente', 'like', '%'.$searchTerm.'%')
+                  ->orWhere('habitacion', 'like', '%'.$searchTerm.'%')
+                  ->orWhere('servicio', 'like', '%'.$searchTerm.'%')
+                  ->orWhere('estado', 'like', '%'.$searchTerm.'%')
+                  ->orWhere('idEvento', 'like', '%'.$searchTerm.'%');
+            });
+        }
+    
+        // Get the sort parameter from the request
+        $sort = $request->input('sort');
+    
+        // Determine the column to sort by based on the sort parameter
+        switch ($sort) {
+            case 'userNombre':
+            case 'encargadaEvento':
+            case  'idEvento':
+            case 'cliente':
+            case 'habitacion':
+            case 'servicio':
+            case 'estado':
+                $query->orderBy($sort);
+                break;
+            case 'start':
+            case 'end':
+                $query->orderBy($sort, 'desc');
+                break;
+            default:
+                $query->orderBy('id');
+                break;
+        }
+    
+        // Get the results
+        $reportes = $query->get();
+    
         // Return the data to the view
-        return view('reporte', compact('reportes'));
+        return view('eventos.reporte', compact('reportes'));
     }
-
+    
     /**
      * Show the form for creating a new resource.
      */

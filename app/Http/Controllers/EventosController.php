@@ -32,9 +32,19 @@ class EventosController extends Controller
     public function store(Request $request)
     {
         //
-        $datosEvento=request()->except(['_token','_method']);
-        evento::insert($datosEvento);
-        print_r($datosEvento);
+        $evento = new Evento;
+        $evento->title = $request->title;
+        $evento->cliente = $request->cliente;
+        $evento->habitacion = $request->habitacion;
+        $evento->servicio = $request->servicio;
+        $evento->color = $request->color;
+        $evento->estado = $request->estado;
+        $evento->textColor = $request->textColor;
+        $evento->start = $request->start;
+        $evento->end = $request->end;
+        $evento->save();
+      
+        return response()->json(['id' => $evento->id]);
     }
 
     /**
@@ -43,7 +53,9 @@ class EventosController extends Controller
     public function show(string $id)
     {
         //
-        $data['eventos'] = evento::where('estado', 'C')->get();
+        $data['eventos'] = evento::where('estado', 'C')
+        ->orWhere('estado', 'M')
+        ->get();
         return response()->json($data['eventos']);
     }
 
@@ -59,12 +71,21 @@ class EventosController extends Controller
      * Update the specified resource in storage.
      */
     public function update(Request $request, string $id)
-    {
-        //
-        $datosEvento=request()->except(['_token','_method']);
-        $respuesta=evento::where('id',"=",$id)->update($datosEvento);
-        return response()->json($respuesta);
-    }
+{
+    $evento = Evento::findOrFail($id);
+    $evento->title = $request->title;
+    $evento->cliente = $request->cliente;
+    $evento->habitacion = $request->habitacion;
+    $evento->servicio = $request->servicio;
+    $evento->color = $request->color;
+    $evento->estado = 'M';
+    $evento->textColor = $request->textColor;
+    $evento->start = $request->start;
+    $evento->end = $request->end;
+    $evento->save();
+
+    return response()->json($evento);
+}
 
     /**
      * Remove the specified resource from storage.

@@ -63,8 +63,9 @@
         </li>
         @endif
         <!-- Reporte LINK -->
-        <a type="button" class="nav-link" data-bs-toggle="modal" data-bs-target="#addModal">Reporte</a>
-
+        <li class="nav-item">
+            <a class="nav-link" href="{{ route('reporte.index') }}">{{ __('Reporte') }}</a>
+        </li>
         <a type="button" class="nav-link" data-bs-toggle="modal" data-bs-target="#addModal">Añadir</a>
         
         <!-- Modal -->

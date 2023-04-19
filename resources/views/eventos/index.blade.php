@@ -107,8 +107,23 @@
 
     $('#btnAgregar').click(function(){
         ObjEvento=recolectarDatosGUI("POST");
-        EnviarInformacion('',ObjEvento);
-        estado="C";
+        EnviarInformacion('', ObjEvento)
+    .then(function(objEventoReporte) {
+        console.log("Generated IDSgeunda: " + JSON.stringify(objEventoReporte));
+    // Do something with the generated ID
+    EnviarReporteInformacion(objEventoReporte, 'C')
+  .then(function(response) {
+    console.log("Generated ID: ", response.id);
+    // Do something with the generated ID
+  })
+  .catch(function(error) {
+    console.log("Error occurred: ", error);
+  });
+  })
+  .catch(function() {
+    console.log("Error occurred");
+  });
+      
        
     });
 
@@ -116,14 +131,14 @@
         ObjEvento=recolectarDatosGUI("DELETE");
         EnviarInformacion('/'+$('#txtID').val(),ObjEvento);
         estado="E";
-        EnviarReporteInformacion("",ObjEvento,estado)
+        EnviarReporteInformacion(ObjEvento,estado)
     });
 
     $('#btnModificar').click(function(){
         ObjEvento=recolectarDatosGUI("PATCH");
         EnviarInformacion('/'+$('#txtID').val(),ObjEvento);
         estado="M";
-        EnviarReporteInformacion("",ObjEvento,estado)
+        EnviarReporteInformacion(ObjEvento,estado)
     });
 
     function recolectarDatosGUI(method){
@@ -146,41 +161,45 @@
     }
 
     function EnviarInformacion(accion,objEvento){
-        $.ajax({
-            type:"POST",
-            url:url_eventos+accion,
-            data:objEvento,
-            success:function(msg){
-                console.log(msg);
-                $('#exampleModal').modal('toggle'); 
-                calendar.refetchEvents( );
-                console.log("EVENTO OBJEC:" + objEvento._method );
-               
-                //StoreReporte
-               
-            },
-            error:function(){alert("Hay un error");}
-        });
-        
-    }
-    function EnviarReporteInformacion(accion, objEvento,estado) {
-           
-            $.ajax({
-            type: "POST",
-            url: "{{ route('reporte.enviar') }}",
-            data: {
+  return new Promise(function(resolve, reject) {
+    $.ajax({
+      type:"POST",
+      url:url_eventos+accion,
+      data:objEvento,
+      success:function(msg){
+        console.log(msg);
+        $('#exampleModal').modal('toggle'); 
+        calendar.refetchEvents( );
+        console.log("EVENTO OBJEC:" + objEvento._method );
+        var responseObj = Object.assign({}, objEvento, {id:msg.id});
+        resolve(responseObj); // resolve the generated ID
+      },
+      error:function(){reject();}
+    });
+  });
+}
+function EnviarReporteInformacion(objEvento, estado) {
+  return new Promise(function(resolve, reject) {
+    $.ajax({
+      type: "POST",
+      url: "{{ route('reporte.enviar') }}",
+      data: {
         '_token': '{{ csrf_token() }}',
         'objEvento': objEvento,
         'estado': estado
-    },
-    success: function(msg) {
+      },
+      success: function(msg) {
         console.log("Success reporte: ", msg);
-    },
-    error: function(xhr, status, error) {
+        resolve(msg); // resolve with the server response
+      },
+      error: function(xhr, status, error) {
         console.error("Error reporte: ", error);
-    }
-});
-        }
+        reject(error); // reject with the error message
+      }
+    });
+  });
+}
+
     function limpiarFormulario(){
             $('#txtID').val(""),
             $('#txtTitle').val(""),
