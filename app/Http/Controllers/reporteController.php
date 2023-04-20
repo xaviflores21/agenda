@@ -20,17 +20,28 @@ class reporteController extends Controller
         $query = reporte::query();
     
         // If search term is provided, filter the results
-        if ($request->has('search')) {
+        if ($request->has('search') && $request->has('search_by')) {
             $searchTerm = $request->input('search');
-            $query->where(function($q) use ($searchTerm) {
-                $q->where('userNombre', 'like', '%'.$searchTerm.'%')
-                  ->orWhere('encargadaEvento', 'like', '%'.$searchTerm.'%')
-                  ->orWhere('cliente', 'like', '%'.$searchTerm.'%')
-                  ->orWhere('habitacion', 'like', '%'.$searchTerm.'%')
-                  ->orWhere('servicio', 'like', '%'.$searchTerm.'%')
-                  ->orWhere('estado', 'like', '%'.$searchTerm.'%')
-                  ->orWhere('idEvento', 'like', '%'.$searchTerm.'%');
-            });
+            $searchBy = $request->input('search_by');
+          
+            if ($searchBy == 'all') {
+                $query->where(function($q) use ($searchTerm) {
+                    $q->where('id', 'like', '%'.$searchTerm.'%')
+                      ->orWhere('userNombre', 'like', '%'.$searchTerm.'%')
+                      ->orWhere('idEvento', 'like', '%'.$searchTerm.'%')
+                      ->orWhere('encargadaEvento', 'like', '%'.$searchTerm.'%')
+                      ->orWhere('cliente', 'like', '%'.$searchTerm.'%')
+                      ->orWhere('habitacion', 'like', '%'.$searchTerm.'%')
+                      ->orWhere('servicio', 'like', '%'.$searchTerm.'%')
+                      ->orWhere('start', 'like', '%'.$searchTerm.'%')
+                      ->orWhere('end', 'like', '%'.$searchTerm.'%')
+                      ->orWhere('estado', 'like', '%'.$searchTerm.'%');
+                });
+            } else  if ($searchBy == 'id') {
+                $query->where('id', $searchTerm);
+            } else {
+                $query->where($searchBy, 'like', '%'.$searchTerm.'%');
+            }
         }
     
         // Get the sort parameter from the request

@@ -43,9 +43,11 @@
   <div class="row">
     <div class="col-md-8">
       <div class="input-group">
-        <select class="form-control"  name="search_field" >
+        <select class="form-control"  name="search_by" >
+          <option value="all">All Fields</option>
           <option value="id">ID</option>
           <option value="userNombre">User</option>
+          <option value="idEvento">idEvento</option>
           <option value="encargadaEvento">Evento</option>
           <option value="cliente">Cliente</option>
           <option value="habitacion">Habitación</option>
