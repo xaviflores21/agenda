@@ -14,7 +14,7 @@
         <a href="{{ route('reporte.index', ['sort' => 'idEvento']) }}">Id Evento</a>
       </th>
       <th scope="col">
-        <a href="{{ route('reporte.index', ['sort' => 'encargadaEvento']) }}">Evento</a>
+        <a href="{{ route('reporte.index', ['sort' => 'encargadaEvento']) }}">Encargada</a>
       </th>
       <th scope="col">
         <a href="{{ route('reporte.index', ['sort' => 'cliente']) }}">Cliente</a>
@@ -48,7 +48,7 @@
           <option value="id">ID</option>
           <option value="userNombre">User</option>
           <option value="idEvento">idEvento</option>
-          <option value="encargadaEvento">Evento</option>
+          <option value="encargadaEvento">Encargada</option>
           <option value="cliente">Cliente</option>
           <option value="habitacion">Habitación</option>
           <option value="servicio">Servicio</option>

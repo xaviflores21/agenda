@@ -256,7 +256,7 @@ function EnviarReporteInformacion(objEvento, estado) {
                 <label>
                     Hora:
                 </label>
-                <input type="time" min="07:00" max="19:00" steps="600" class="form-control" name="txtHora" id="txtHora">
+                <input type="time" min="07:00" max="23:00" steps="600" class="form-control" name="txtHora" id="txtHora">
             </div>
             <div class="form-group col-md-9">
                 <label>

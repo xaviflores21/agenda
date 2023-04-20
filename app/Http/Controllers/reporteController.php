@@ -39,6 +39,8 @@ class reporteController extends Controller
                 });
             } else  if ($searchBy == 'id') {
                 $query->where('id', $searchTerm);
+            }else  if ($searchBy == 'idEvento') {
+                $query->where('idEvento', $searchTerm);
             } else {
                 $query->where($searchBy, 'like', '%'.$searchTerm.'%');
             }
