@@ -52,6 +52,7 @@
                 text:"Agregar Evento",
                 click:function(){
                     $('#exampleModal').modal('show')
+                    $('#txtHora').val("07:00");
                 }
             }
         },

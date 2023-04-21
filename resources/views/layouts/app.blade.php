@@ -5,7 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <!-- CSRF Token -->
-    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <!-- CSRF Token -->
+<meta name="csrf-token" content="{{ csrf_token() }}" crossorigin="anonymous">
+
 
     <title>{{ config('app.name', 'Laravel') }}</title>
 
@@ -93,7 +95,7 @@
         @endauth
     @else
         <li class="nav-item">
-            <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
+            <a class="nav-link" href="{{ route('login') }}">{{ __('Iniciar sesion') }}</a>
         </li>
         <li class="nav-item">
         @if (Route::currentRouteName() != 'login') <!-- add this conditional statement -->
