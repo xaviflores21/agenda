@@ -73,7 +73,7 @@ class PersonasController extends Controller
     
 public function addName(Request $request)
 {
-    if (!Auth::user()->isAdmin()) {
+    if (!Auth::user()->isAdmin() && !Auth::user()->esJefeDeArea()) {
         abort(403, 'Unauthorized action.');
     }
 

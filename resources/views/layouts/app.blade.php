@@ -58,7 +58,7 @@
             </div>
         </li>
         @auth
-        @if(Auth::user()->role == 'admin')
+        @if(in_array(Auth::user()->role, ['admin', 'Jefe de area']))
         @if (Route::currentRouteName() != 'login')
         <li class="nav-item">
             <a class="nav-link" href="{{ route('register') }}">{{ __('Registrar') }}</a>

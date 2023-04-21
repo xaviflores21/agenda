@@ -309,7 +309,7 @@ function EnviarReporteInformacion(objEvento, estado) {
         <div class="modal-footer">
         <button id="btnAgregar" class="btn btn-success">Agregar</button>
         <button id="btnModificar" class="btn btn-warning">Modificar</button>
-        @if(Auth::user()->role=='admin')
+        @if(in_array(Auth::user()->role, ['admin', 'Jefe de area']))
         <button id="btnEliminar" class="btn btn-danger">Borrar</button>
         @endif
         

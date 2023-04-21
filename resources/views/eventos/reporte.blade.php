@@ -8,7 +8,7 @@
         <a href="{{ route('reporte.index', ['sort' => 'id']) }}">#</a>
       </th>
       <th scope="col">
-        <a href="{{ route('reporte.index', ['sort' => 'userNombre']) }}">User</a>
+        <a href="{{ route('reporte.index', ['sort' => 'userNombre']) }}">Usuario</a>
       </th>
       <th scope="col">
         <a href="{{ route('reporte.index', ['sort' => 'idEvento']) }}">Id Evento</a>
@@ -44,9 +44,9 @@
     <div class="col-md-8">
       <div class="input-group">
         <select class="form-control"  name="search_by" >
-          <option value="all">All Fields</option>
+          <option value="all">Todos los campos</option>
           <option value="id">ID</option>
-          <option value="userNombre">User</option>
+          <option value="userNombre">Usuario</option>
           <option value="idEvento">idEvento</option>
           <option value="encargadaEvento">Encargada</option>
           <option value="cliente">Cliente</option>

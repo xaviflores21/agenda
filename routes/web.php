@@ -30,7 +30,7 @@ Route::post('/admin/login', [App\Http\Controllers\Auth\AdminLoginController::cla
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 //Reporte
-Route::middleware(['auth', 'isAdmin'])->group(function () {
+Route::middleware(['auth', 'esJefeDeArea'])->group(function () {
     Route::resource('reporte', 'App\Http\Controllers\reporteController');
 });
 Route::post('/reporte/enviar',  [App\Http\Controllers\reporteController::class, 'EnviarReporteInformacion'])->name('reporte.enviar');

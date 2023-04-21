@@ -92,7 +92,8 @@ class RegisterController extends Controller
         }
     
         // If there is an admin user, check if the current user is an admin
-        if (!Auth::user() || !Auth::user()->isAdmin()) {
+        $user = Auth::user();
+        if (!$user || (!$user->isAdmin() && !$user->esJefeDeArea())) {
             abort(403, 'Unauthorized action.');
         }
     
