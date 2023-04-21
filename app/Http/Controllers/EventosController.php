@@ -36,6 +36,7 @@ class EventosController extends Controller
         $evento->title = $request->title;
         $evento->cliente = $request->cliente;
         $evento->habitacion = $request->habitacion;
+        $evento->telefono = $request->telefono;
         $evento->servicio = $request->servicio;
         $evento->color = $request->color;
         $evento->estado = $request->estado;
@@ -76,6 +77,7 @@ class EventosController extends Controller
     $evento->title = $request->title;
     $evento->cliente = $request->cliente;
     $evento->habitacion = $request->habitacion;
+    $evento->telefono = $request->telefono;
     $evento->servicio = $request->servicio;
     $evento->color = $request->color;
     $evento->estado = 'M';

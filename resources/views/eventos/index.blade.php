@@ -72,7 +72,7 @@
             $('#txtTitle').val(info.event.title),
             $('#txtCliente').val(info.event.extendedProps.cliente),
             $('#txtHabitacion').val(info.event.extendedProps.habitacion),
-
+            $('#txtTelefono').val(info.event.extendedProps.telefono),
             mes =(info.event.start.getMonth()+1);
             dia=(info.event.start.getDate());
             anio=(info.event.start.getFullYear());
@@ -97,7 +97,21 @@
             $('#exampleModal').modal('show')
         }, 
         events:url_show,
-        
+  //       eventRender: function(info) {
+  //   var element = info.el;
+  //   var event = info.event;
+
+  //   // Add a custom attribute to the event element to store additional information
+  //   $(element).attr('data-info', 'Cliente: ' + event.extendedProps.cliente + ', Habitación: ' + event.extendedProps.habitacion+ ', Telefono: ' + event.extendedProps.telefono);
+
+  //   // Add a tooltip to display the additional information when the user hovers over the event
+  //   $(element).tooltip({
+  //     title: $(element).attr('data-info'),
+  //     placement: 'top',
+  //     trigger: 'hover',
+  //     container: 'body'
+  //   });
+  // }
         
         //"{{url('/eventos/show')}}"
 
@@ -148,6 +162,7 @@
             title:$('#txtTitle').val(),
             cliente:$('#txtCliente').val(),
             habitacion:$('#txtHabitacion').val(),
+            telefono:$('#txtTelefono').val(),
             servicio:$('#txtServicio').val(),
             color:$('#txtColor').val(),
             estado:'C',
@@ -209,7 +224,8 @@ function EnviarReporteInformacion(objEvento, estado) {
             $('#txtFecha').val(""),
             $('#txtHora').val("07:00"),
             $('#txtColor').val(""),
-            $('#txtServicio').val("");
+            $('#txtServicio').val(""),
+            $('#txtTelefono').val("");
     }
     console.log("{{url('/eventos')}}")
 })</script>
@@ -278,14 +294,19 @@ function EnviarReporteInformacion(objEvento, estado) {
                 <textarea name="txtServicio" class="form-control" id="txtServicio" cols="30" rows="3"></textarea>
             </div>
           
-            <div class="form-group col-md-12">
+            <div class="form-group col-md-3">
                 <label>
                     Color:
                 </label>
                 
                 <input type="color" class="form-control" name="txtColor" id="txtColor">
             </div>
-            
+            <div class="form-group col-md-9">
+                <label>
+                    Telefono:
+                </label>
+                <input type="text" class="form-control" name="txtTelefono" id="txtTelefono">
+            </div>
             <script>// Get the txtTitle and txtColor inputs
                 var txtTitle = document.getElementById('txtTitle');
                 var txtColor = document.getElementById('txtColor');
