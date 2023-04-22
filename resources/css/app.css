@@ -1,2 +1,8 @@
 @import 'variables';
 @import '~bootstrap/css/bootstrap';
+@media (min-width: 1200px) {
+    .container {
+      max-width: 1200px;
+    }
+  }
+/* Ningun cambio se realiza aqui todo se hace en el custom.scss en el sass */

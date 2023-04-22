@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('title',255);
             $table->string('cliente',255);
             $table->integer('habitacion')->nullable();
-            $table->varchar('telefono')->nullable();
+            $table->string('telefono')->nullable();
             $table->text('servicio');
             $table->string('color',20);
             $table->char('estado',1);

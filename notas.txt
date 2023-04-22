@@ -1,0 +1,1 @@
+Cuando se use el google chrome Si por alguna razon tenes el breakpoint con sus opciones activadas, desactivarlas y volver a probar la pagina

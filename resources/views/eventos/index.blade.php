@@ -6,7 +6,8 @@
   integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E="
   crossorigin="anonymous"></script>
 
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css">
+
+
 <!--<script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>-->
 
 <link rel="stylesheet" href="{{asset('fullcalendar/core/main.css')}}">
@@ -97,6 +98,18 @@
             $('#exampleModal').modal('show')
         }, 
         events:url_show,
+        eventRender: function(info) {
+  // Access the event object and retrieve the additional field
+  var event = info.event;
+  var description = event.extendedProps.habitacion;
+
+  // Create a new div element to display the additional information
+  var descriptionElement = document.createElement('div');
+  descriptionElement.innerHTML = 'Hab: '+description;
+
+  // Append the new element to the event element
+  info.el.querySelector('.fc-content').appendChild(descriptionElement);
+}
   //       eventRender: function(info) {
   //   var element = info.el;
   //   var event = info.event;
