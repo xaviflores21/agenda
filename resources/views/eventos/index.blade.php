@@ -7,7 +7,7 @@
   crossorigin="anonymous"></script>
 
 
-
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
 <!--<script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>-->
 
 <link rel="stylesheet" href="{{asset('fullcalendar/core/main.css')}}">
@@ -43,14 +43,14 @@
             right:'dayGridMonth,timeGridWeek,timeGridDay'
         },
         buttonText: {
-            today: 'hoy',
+            today: 'Dia Actual',
             day: 'Dia',
             week:'Semana',
              month:'Mes'
         },
         customButtons:{
             Miboton:{
-                text:"Agregar Evento",
+                text:"Horarios",
                 click:function(){
                     $('#exampleModal').modal('show')
                     $('#txtHora').val("07:00");
@@ -58,12 +58,33 @@
             }
         },
         dateClick:function(info){
+          if (info.view.type === 'timeGridWeek'||info.view.type==='timeGridDay') {
+            // Parse the date string using moment
+            var momentDate = moment(info.date);
+            var hour = momentDate.hour(); // Get the hour (0-23)
+            var minutes = momentDate.minutes(); // Get the minutes (0-59)
+            var timeStr = hour.toString().padStart(2, '0') + ':' + minutes.toString().padStart(2, '0');
+            // Outputs "07:00" for April 21st 2023 at 7:00 AM
+
+            var momentDate = moment(info.dateStr);
+
+            // Format the date string as "YYYY-MM-DDTHH:mm:ss"
+            var formattedDate = momentDate.format('YYYY-MM-DD');
+            
+            // Set the dateStr value to the formatted date string
+            info.dateStr = formattedDate;
+          }
             limpiarFormulario();
             $('#txtFecha').val(info.dateStr);      
             $("#btnAgregar").prop("disabled",false);
             $("#btnModificar").prop("disabled",true);
             $("#btnEliminar").prop("disabled",true);
-            $('#exampleModal').modal('show')
+            $('#exampleModal').modal('show');
+            if (typeof timeStr === "undefined") {
+              $('#txtHora').val("07:00");
+            } else {
+              $('#txtHora').val(timeStr);
+            }
         },
         eventClick:function(info){
             $("#btnAgregar").prop("disabled",true);
@@ -86,11 +107,21 @@
 
             minutos=(minutos<10)?"0"+minutos:minutos;
             hora=(hora<10)?"0"+hora:hora;
-
             horario=(hora+":"+minutos);
 
+            if(info.event.end) {
+            horaEnd=(info.event.end.getHours()<10)?"0"+info.event.end.getHours():info.event.end.getHours();
+            minutosEnd=(info.event.end.getMinutes()<10)?"0"+info.event.end.getMinutes():info.event.end.getMinutes();
+            horarioEnd=(info.event.end.getHours()+':'+info.event.end.getMinutes())
+            } else {
+              horaEnd = hora;
+              minutosEnd = minutos;
+              horarioEnd = horario; 
+            }
+            console.log(horarioEnd)
             $('#txtFecha').val(anio+"-"+mes+"-"+dia),
             $('#txtHora').val(horario),
+            $('#txtHoraEventoTerminado').val(horaEnd+":"+minutosEnd),
             $('#txtColor').val(info.event.backgroundColor),
 
             $('#txtServicio').val(info.event.extendedProps.servicio),
@@ -98,18 +129,29 @@
             $('#exampleModal').modal('show')
         }, 
         events:url_show,
-        eventRender: function(info) {
+       eventRender: function(info) {
+        
   // Access the event object and retrieve the additional field
-  var event = info.event;
-  var description = event.extendedProps.habitacion;
+          var event = info.event;
+          var description = event.extendedProps.habitacion;
+          if (description === null) {
+           description = 0;
+          }
 
-  // Create a new div element to display the additional information
-  var descriptionElement = document.createElement('div');
-  descriptionElement.innerHTML = 'Hab: '+description;
+  // Create a new span element to display the additional information in bold
+          var descriptionElement = document.createElement('span');
+          descriptionElement.innerHTML = '<strong> Hab: </strong>' + description;
 
   // Append the new element to the event element
-  info.el.querySelector('.fc-content').appendChild(descriptionElement);
-}
+          info.el.querySelector('.fc-title').appendChild(descriptionElement);
+        }
+
+  /* Para append datos en el contenedor inferior de title solo cambiar el .fc-title por container o algo parecido
+       info.el.querySelector('.fc-content').appendChild(descriptionElement);
+          }
+  */
+
+  //TOOLTIPS
   //       eventRender: function(info) {
   //   var element = info.el;
   //   var event = info.event;
@@ -170,6 +212,10 @@
     });
 
     function recolectarDatosGUI(method){
+        let endValue=$('#txtHoraEventoTerminado').val();
+        if(endValue == null || endValue=='00:00'){
+          endValue =$('#txtHora').val()
+        }
         nuevoEvento={
             id:$('#txtID').val(),
             title:$('#txtTitle').val(),
@@ -181,7 +227,7 @@
             estado:'C',
             textColor:'#FFFFFF',
             start:$('#txtFecha').val()+" "+$('#txtHora').val(),
-            end:$('#txtFecha').val()+" "+$('#txtHora').val(),
+            end:$('#txtFecha').val()+" "+endValue,
             '_token':$("meta[name='csrf-token']").attr("content"),
             '_method':method
         }
@@ -234,6 +280,7 @@ function EnviarReporteInformacion(objEvento, estado) {
             $('#txtTitle').val(""),
             $('#txtCliente').val(""),
             $('#txtHabitacion').val(""),
+            $('#txtHoraEventoTerminado').val("--:--"),
             $('#txtFecha').val(""),
             $('#txtHora').val("07:00"),
             $('#txtColor').val(""),
@@ -270,7 +317,7 @@ function EnviarReporteInformacion(objEvento, estado) {
           </div>
             
           <div class="form-row">
-            <div class="form-group col-md-8">
+            <div class="form-group col-md-6">
             <label for="exampleDataList" class="form-label">Encargada</label>
             <input class="form-control" list="datalistOptions" id="txtTitle" name="txtTitle" placeholder="Seleccione persona a cargo...">
                 <datalist id="datalistOptions">
@@ -282,11 +329,17 @@ function EnviarReporteInformacion(objEvento, estado) {
                 </datalist>
             </div>
             
-            <div class="form-group col-md-4">
+            <div class="form-group col-md-3">
                 <label>
                     Hora:
                 </label>
                 <input type="time" min="07:00" max="23:00" steps="600" class="form-control" name="txtHora" id="txtHora">
+            </div>
+            <div class="form-group col-md-3">
+                <label>
+                    Terminado:
+                </label>
+                <input type="time" min="07:00" max="23:00" steps="600" class="form-control" name="txtHoraEventoTerminado" id="txtHoraEventoTerminado">
             </div>
             <div class="form-group col-md-9">
                 <label>
