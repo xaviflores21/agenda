@@ -17,7 +17,9 @@ class EventosController extends Controller
         $personas = Personas::all();
         return view('eventos/index', compact('personas'));
     }
-
+    public function horariosIndex(){
+        
+    }
     /**
      * Show the form for creating a new resource.
      */
@@ -99,5 +101,5 @@ class EventosController extends Controller
         $evento->estado = 'E';
         $evento->save();
         return response()->json($evento);
-        }
+    }
 }

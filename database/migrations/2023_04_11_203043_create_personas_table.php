@@ -13,10 +13,17 @@ return new class extends Migration
     {
         Schema::create('personas', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->string('dias',30)->nullable();
             $table->string('nombreCompleto',80);
             $table->string('color',20);
+            $table->time('horarioInicio')->nullable();
+            $table->time('horarioFinal')->nullable();
+            $table->char('estado',1);
+            $table->integer('idAnterior')->nullable();
+            $table->dateTime('start')->nullable();
+            $table->dateTime('end')->nullable();
+           
             $table->timestamps();
-
         });
     }
 

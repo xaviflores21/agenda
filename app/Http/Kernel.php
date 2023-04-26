@@ -3,6 +3,7 @@
 namespace App\Http;
 
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
+use Illuminate\Console\Scheduling\Schedule;
 
 class Kernel extends HttpKernel
 {
@@ -67,4 +68,14 @@ class Kernel extends HttpKernel
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
     ];
+    protected function schedule(Schedule $schedule)
+    {
+        $schedule->call(function () {
+           info("Executing SCHEDULE");
+           (new \App\Http\Controllers\PersonasController)->mostrarEventos();
+            // Put the code that you want to run on a schedule here
+        //})->weeklyOn(0, '15:23');
+        //})->weekly()->sundays()->at('09:00');
+        })->everyMinute();
+    }
 }

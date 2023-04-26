@@ -22,17 +22,151 @@
 <script src="{{asset('fullcalendar/timegrid/main.js')}}" defer></script>
 
 <script>
-    let url_eventos="{{url('/eventos')}}";
-    let url_reporte="{{url('/reporte')}}";
-    let url_show="{{url('/eventos/show')}}";
-    var routes = {
-        'horarios': '{{ route("horarios") }}',
-        // add other route URLs here
-    };
+    let url_show="{{url('/personal/mostrarEventos')}}";
 </script>
 
 <!-- LLamando al SCRIPT CALENDAR -->
-<script src="{{asset('js/main.js')}}" defer></script>
+<script>document.addEventListener("DOMContentLoaded", function () {
+    var calendarEl = document.getElementById("calendar");
+    var calendar = new FullCalendar.Calendar(calendarEl, {
+        plugins: ["dayGrid", "interaction", "timeGrid", "list"],
+
+        defaultView:'timeGridWeek',   //Alternador de modelos calendario
+
+        header: {
+            left: "prev,next today Miboton",
+            center: "title",
+            right: "timeGridWeek,timeGridDay",
+        },
+        buttonText: {
+            today: "Dia Actual",
+            day: "Dia",
+            week: "Semana",
+            month: "Mes",
+        },
+        customButtons: {
+            Miboton: {
+                text: "Horarios",
+                //Puedo agregar algo nuevo
+            },
+        },
+        dateClick: function (info) {
+            console.log(info.event)
+            if (
+                info.view.type === "timeGridWeek" ||
+                info.view.type === "timeGridDay"
+            ) {
+                // Parse the date string using moment
+                var momentDate = moment(info.date);
+                var hour = momentDate.hour(); // Get the hour (0-23)
+                var minutes = momentDate.minutes(); // Get the minutes (0-59)
+                var timeStr =
+                    hour.toString().padStart(2, "0") +
+                    ":" +
+                    minutes.toString().padStart(2, "0");
+                // Outputs "07:00" for April 21st 2023 at 7:00 AM
+
+                var momentDate = moment(info.dateStr);
+
+                // Format the date string as "YYYY-MM-DDTHH:mm:ss"
+                var formattedDate = momentDate.format("YYYY-MM-DD");
+
+                // Set the dateStr value to the formatted date string
+                info.dateStr = formattedDate;
+            }
+            limpiarFormulario();
+            $("#txtFecha").val(info.dateStr);
+            $("#btnAgregar").prop("disabled", false);
+            $("#btnModificar").prop("disabled", true);
+            $("#btnEliminar").prop("disabled", true);
+            $("#exampleModal").modal("show");
+            if (typeof timeStr === "undefined") {
+                $("#txtHora").val("07:00");
+            } else {
+                $("#txtHora").val(timeStr);
+            }
+        },
+        eventClick: function (info) {
+            console.log(info)
+            $("#btnAgregar").prop("disabled", true);
+            $("#btnModificar").prop("disabled", false);
+            $("#btnEliminar").prop("disabled", false);
+            $("#txtID").val(info.event.id),
+                $("#txtTitle").val(info.event.title),
+                $("#txtCliente").val(info.event.extendedProps.cliente),
+                $("#txtHabitacion").val(info.event.extendedProps.habitacion),
+                $("#txtTelefono").val(info.event.extendedProps.telefono),
+                (mes = info.event.start.getMonth() + 1);
+            dia = info.event.start.getDate();
+            anio = info.event.start.getFullYear();
+
+            mes = mes < 10 ? "0" + mes : mes;
+            dia = dia < 10 ? "0" + dia : dia;
+
+            minutos = info.event.start.getMinutes();
+            hora = info.event.start.getHours();
+
+            minutos = minutos < 10 ? "0" + minutos : minutos;
+            hora = hora < 10 ? "0" + hora : hora;
+            horario = hora + ":" + minutos;
+
+            if (info.event.end) {
+                horaEnd =
+                    info.event.end.getHours() < 10
+                        ? "0" + info.event.end.getHours()
+                        : info.event.end.getHours();
+                minutosEnd =
+                    info.event.end.getMinutes() < 10
+                        ? "0" + info.event.end.getMinutes()
+                        : info.event.end.getMinutes();
+                horarioEnd =
+                    info.event.end.getHours() +
+                    ":" +
+                    info.event.end.getMinutes();
+            } else {
+                horaEnd = hora;
+                minutosEnd = minutos;
+                horarioEnd = horario;
+            }
+            console.log(horarioEnd);
+            $("#txtFecha").val(anio + "-" + mes + "-" + dia),
+                $("#txtHora").val(horario),
+                $("#txtHoraEventoTerminado").val(horaEnd + ":" + minutosEnd),
+                $("#txtColor").val(info.event.backgroundColor),
+                $("#txtServicio").val(info.event.extendedProps.servicio),
+                $("#exampleModal").modal("show");
+        },
+        events:url_show  ,
+        eventRender: function (info) {
+            // Access the event object and retrieve the additional field
+            //TOOLTIPS
+
+     
+        
+        },
+        //
+    });
+    calendar.setOption("locale", "Es");
+    calendar.render();
+
+    
+
+    function limpiarFormulario() {
+        $("#txtID").val(""),
+            $("#txtTitle").val(""),
+            $("#txtCliente").val(""),
+            $("#txtHabitacion").val(""),
+            $("#txtHoraEventoTerminado").val("--:--"),
+            $("#txtFecha").val(""),
+            $("#txtHora").val("07:00"),
+            $("#txtColor").val(""),
+            $("#txtServicio").val(""),
+            $("#txtTelefono").val("");
+    }
+    console.log("{{url('/eventos')}}");
+});
+console.log("Ejecutando desde el main.js");
+</script>
 
 @endsection
 @section('content')
@@ -66,13 +200,10 @@
             <label for="exampleDataList" class="form-label">Encargada</label>
             <input class="form-control" list="datalistOptions" id="txtTitle" name="txtTitle" placeholder="Seleccione persona a cargo...">
                 <datalist id="datalistOptions">
-                
-                @foreach($personas as $persona)
-                @if($persona->estado == 'C' || $persona->estado == 'M')
-                    <option value="{{ $persona->nombreCompleto }}" data-color="{{ $persona->color }}">
-                @endif
+                @foreach($personas as $personas)
+                 
+               
                 @endforeach
-
                 </datalist>
             </div>
             

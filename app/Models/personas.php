@@ -16,7 +16,11 @@ class personas extends Model
     protected $fillable = [
         'id',
         'nombreCompleto',
-        'color'
+        'color',
+        'horarioInicio',
+        'horarioFinal',
+        'estado',
+        'idAnterior',
     ];
 
 }
