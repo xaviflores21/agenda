@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Personas;
+use App\Models\Horarios;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Faker\Factory as Faker;
@@ -16,13 +17,14 @@ class PersonasController extends Controller
      */
     public function index()
 {
-    $personas = Personas::all();
-    return view("eventos.personal", ['personas' => $personas]);
+    $personas = Personas::with('horarios')->get();
+    $horarios = Horarios::all();
+    return view("eventos.personal", compact('personas','horarios'));
 }
 public function horariosIndex()
 {
-    $personas = Personas::all();
-    return view('eventos.horarios',['personas' => $personas]);
+    $personas = Personas::with('horarios')->get();
+    return view("eventos.horarios", compact('personas'));
 }
     /**
      * Show the form for creating a new resource.
@@ -38,16 +40,26 @@ public function horariosIndex()
      */
     public function store(Request $request)
     {
-        $personas = new Personas();
-        $personas->nombreCompleto = $request->input('nombreCompleto');
-        $personas->color = $request->input('color');
-        $personas->horarioInicio = $request->input('horarioInicio');
-        $personas->horarioFinal = $request->input('horarioFinal');
-        $personas->estado = 'C';
-        $personas->save();
+        $validatedData = $request->validate([
+            'nombreCompleto' => 'required|string|max:255',
+            'color' => 'required|string|max:255',
+            'telefono' => 'nullable|string|max:255',
+            'horario_id' => 'required|integer|exists:horarios,id', // Ensure that the selected horario_id exists in the horarios table
+        ]);
     
-        $personas->idAnterior = $personas->id ;
-        $personas->save();
+        $persona = new Personas();
+        $persona->nombreCompleto = $validatedData['nombreCompleto'];
+        $persona->color = $validatedData['color'];
+        $persona->telefono = $validatedData['telefono'];
+        $persona->estado = 'C';
+        $persona->save();
+    
+        $horario = Horarios::find($validatedData['horario_id']); // Find the Horario with the selected horario_id
+        $fecha=now();
+        $horarioString=$horario->horarioInicio . '-' .$horario->horarioFinal;
+        $persona->horarios()->attach($horario, ['fecha' => $fecha, 
+                                                'horarios' => $horarioString,
+                                                'nombreCompleto'=>$persona->nombreCompleto]); // Add the Horario to the Persona's horarios
     
         return redirect()->back()->with('success', 'Record added successfully.');
     }
@@ -90,6 +102,13 @@ public function horariosIndex()
     $newPersonas->horarioInicio = $request->input('horarioInicio');
     $newPersonas->horarioFinal = $request->input('horarioFinal');
     $newPersonas->estado='M';
+    $newPersonas->lunes = $request->has('lunes');
+    $newPersonas->martes = $request->has('martes');
+    $newPersonas->miercoles = $request->has('miercoles');
+    $newPersonas->jueves = $request->has('jueves');
+    $newPersonas->viernes = $request->has('viernes');
+    $newPersonas->sabado = $request->has('sabado');
+    $newPersonas->domingo = $request->has('domingo');
     $newPersonas->save();
 
     // Change the estado of the original entry to "M"
@@ -106,13 +125,25 @@ public function horariosIndex()
      */
     public function destroy(string $id)
 {
-
     $personas = personas::findOrFail($id);
+
+    // Update the observacion field of the pivot records between the persona and horarios tables
+    foreach ($personas->horarios as $horario) {
+        $horario->pivot->observacion = 'Record deleted';
+        $horario->pivot->save();
+    }
+
+    // Update the estado field of the horarios records
+    $personas->horarios()->update(['estado' => 'E']);
+
+    // Update the estado field of the persona record
     $personas->estado = 'E';
     $personas->save();
+
     return redirect()->back()->with('success', 'Record deleted successfully.');
 }
 
+    
     
     public function addName(Request $request)
     {
