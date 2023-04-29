@@ -5,22 +5,19 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class personas extends Model
+class Personas extends Model
 {
     use HasFactory;
-    /**
-    * Fillable fields.
-     *
-    * @var array
-    */
+
     protected $fillable = [
-        'id',
         'nombreCompleto',
+        'telefono',
         'color',
-        'horarioInicio',
-        'horarioFinal',
         'estado',
-        'idAnterior',
     ];
 
+    public function horarios()
+    {
+        return $this->belongsToMany(Horarios::class, 'horario_persona')->withPivot('nombreCompleto','observacion');
+    }
 }

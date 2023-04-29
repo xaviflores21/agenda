@@ -36,6 +36,9 @@ Route::middleware(['auth', 'esJefeDeArea'])->group(function () {
     Route::get('horarios', 'App\Http\Controllers\PersonasController@horariosIndex')->name('horarios');
 
 });
+Route::middleware(['auth', 'esJefeDeArea'])->group(function () {
+    Route::resource('horarios', 'App\Http\Controllers\HorariosController');
+});
 Route::post('/reporte/enviar',  [App\Http\Controllers\reporteController::class, 'EnviarReporteInformacion'])->name('reporte.enviar');
 
 Route::get('/personal/mostrarEventos', [App\Http\Controllers\PersonasController::class, 'mostrarEventos'])->name('personas.mostrarEventos');
