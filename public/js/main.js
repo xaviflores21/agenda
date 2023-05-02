@@ -238,12 +238,13 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
     function EnviarReporteInformacion(objEvento, estado) {
+        console.log("Aqui estan las 11");
         return new Promise(function (resolve, reject) {
             $.ajax({
                 type: "POST",
-                url: "{{ route('reporte.enviar') }}",
+                url: url_reporte_enviar,
                 data: {
-                    _token: "{{ csrf_token() }}",
+                    _token: tokenEnviar,
                     objEvento: objEvento,
                     estado: estado,
                 },

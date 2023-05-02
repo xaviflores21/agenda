@@ -25,13 +25,17 @@
     let url_eventos="{{url('/eventos')}}";
     let url_reporte="{{url('/reporte')}}";
     let url_show="{{url('/eventos/show')}}";
+    let url_reporte_enviar="{{ route('reporte.enviar') }}"
     var routes = {
         'horarios': '{{ route("horarios") }}',
+        'reporteEnviar':'{{ route("reporte.enviar") }}',
         // add other route URLs here
     };
+    let tokenEnviar="{{ csrf_token() }}";
 </script>
 
 <!-- LLamando al SCRIPT CALENDAR -->
+
 <script src="{{asset('js/main.js')}}" defer></script>
 
 @endsection

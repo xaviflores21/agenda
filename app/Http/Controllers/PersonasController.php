@@ -56,7 +56,7 @@ public function horariosIndex()
     
         $horario = Horarios::find($validatedData['horario_id']); // Find the Horario with the selected horario_id
         $fecha=now();
-        $horarioString=$horario->horarioInicio . '-' .$horario->horarioFinal;
+        $horarioString=$horario->horarioInicio . ' - ' .$horario->horarioFinal;
         $persona->horarios()->attach($horario, ['fecha' => $fecha, 
                                                 'horarios' => $horarioString,
                                                 'nombreCompleto'=>$persona->nombreCompleto]); // Add the Horario to the Persona's horarios
@@ -90,33 +90,52 @@ public function horariosIndex()
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, $id)
 {
-    $personas = personas::find($id);
+    $validatedData = $request->validate([
+        'nombreCompleto' => 'required|string|max:255',
+        'color' => 'required|string|max:255',
+        'telefono' => 'nullable|string|max:255',
+        'horario_id' => 'required|integer|exists:horarios,id',
+        'horarioInicio' => 'required|date_format:H:i',
+        'horarioFinal' => 'required|date_format:H:i|after:horarioInicio',
+        'lunes' => 'nullable|boolean',
+        'martes' => 'nullable|boolean',
+        'miercoles' => 'nullable|boolean',
+        'jueves' => 'nullable|boolean',
+        'viernes' => 'nullable|boolean',
+        'sabado' => 'nullable|boolean',
+        'domingo' => 'nullable|boolean',
+    ]);
 
-    // Create a new entry with the updated fields
-    $newPersonas = new personas();
-    $newPersonas->idAnterior = $personas->id;
-    $newPersonas->nombreCompleto = $request->input('nombreCompleto');
-    $newPersonas->color = $request->input('color');
-    $newPersonas->horarioInicio = $request->input('horarioInicio');
-    $newPersonas->horarioFinal = $request->input('horarioFinal');
-    $newPersonas->estado='M';
-    $newPersonas->lunes = $request->has('lunes');
-    $newPersonas->martes = $request->has('martes');
-    $newPersonas->miercoles = $request->has('miercoles');
-    $newPersonas->jueves = $request->has('jueves');
-    $newPersonas->viernes = $request->has('viernes');
-    $newPersonas->sabado = $request->has('sabado');
-    $newPersonas->domingo = $request->has('domingo');
-    $newPersonas->save();
+    $persona = Personas::find($id);
+    $persona->nombreCompleto = $validatedData['nombreCompleto'];
+    $persona->color = $validatedData['color'];
+    $persona->telefono = $validatedData['telefono'];
+    $persona->estado = 'M';
+    $persona->save();
 
-    // Change the estado of the original entry to "M"
-    $personas->estado='E';
-    $personas->save();
+    $horario = Horarios::find($validatedData['horario_id']);
+    $horario->horarioInicio = $validatedData['horarioInicio'];
+    $horario->horarioFinal = $validatedData['horarioFinal'];
+    $horario->lunes = $request->has('lunes') ? 1 : 0;
+    $horario->martes = $request->has('martes') ? 1 : 0;
+    $horario->miercoles = $request->has('miercoles') ? 1 : 0;
+    $horario->jueves = $request->has('jueves') ? 1 : 0;
+    $horario->viernes = $request->has('viernes') ? 1 : 0;
+    $horario->sabado = $request->has('sabado') ? 1 : 0;
+    $horario->domingo = $request->has('domingo') ? 1 : 0;   
+    $horario->estado = 'M';
+    $horario->save();
+    $fecha=now();
+    $horarioString=$horario->horarioInicio . ' - ' .$horario->horarioFinal;
+    $persona->horarios()->sync([$horario->id => ['fecha' => $fecha, 
+                                                'horarios' => $horarioString,
+                                                'nombreCompleto'=>$persona->nombreCompleto]]);
 
     return redirect()->back()->with('success', 'Record updated successfully.');
 }
+
 
 
 
@@ -134,7 +153,7 @@ public function horariosIndex()
     }
 
     // Update the estado field of the horarios records
-    $personas->horarios()->update(['estado' => 'E']);
+    
 
     // Update the estado field of the persona record
     $personas->estado = 'E';
@@ -193,7 +212,35 @@ public function horariosIndex()
 
     return response()->json($events);
 }
+public function addHorario(Request $request)
+{
+    $validatedData = $request->validate([
+        'horarioInicio' => 'required|date_format:H:i',
+        'horarioFinal' => 'required|date_format:H:i|after:horarioInicio',
+        'lunes' => 'nullable|boolean',
+        'martes' => 'nullable|boolean',
+        'miercoles' => 'nullable|boolean',
+        'jueves' => 'nullable|boolean',
+        'viernes' => 'nullable|boolean',
+        'sabado' => 'nullable|boolean',
+        'domingo' => 'nullable|boolean'
+    ]);
+
+    $horario = new Horarios();
+    $horario->horarioInicio = $validatedData['horarioInicio'];
+    $horario->horarioFinal = $validatedData['horarioFinal'];
+    $horario->lunes = $request->has('lunes') ? 1 : 0;
+    $horario->martes = $request->has('martes') ? 1 : 0;
+    $horario->miercoles = $request->has('miercoles') ? 1 : 0;
+    $horario->jueves = $request->has('jueves') ? 1 : 0;
+    $horario->viernes = $request->has('viernes') ? 1 : 0;
+    $horario->sabado = $request->has('sabado') ? 1 : 0;
+    $horario->domingo = $request->has('domingo') ? 1 : 0;   
+    $horario->estado = 'C';
+    $horario->save();
+
+    return redirect()->back()->with('success', 'Horario added successfully.');
+}
 
 
-    
 }

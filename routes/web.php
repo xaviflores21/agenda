@@ -33,7 +33,8 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 Route::middleware(['auth', 'esJefeDeArea'])->group(function () {
     Route::resource('reporte', 'App\Http\Controllers\reporteController');
     Route::resource('personas', 'App\Http\Controllers\PersonasController');
-    Route::get('horarios', 'App\Http\Controllers\PersonasController@horariosIndex')->name('horarios');
+    Route::get('horariosMuestra', 'App\Http\Controllers\PersonasController@horariosIndex')->name('horarios');
+    Route::post('horarios/addHorarios', [App\Http\Controllers\PersonasController::class, 'addHorario'])->name('horarios.add');
 
 });
 Route::middleware(['auth', 'esJefeDeArea'])->group(function () {

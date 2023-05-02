@@ -17,8 +17,9 @@ class HorariosController extends Controller
     public function index()
     {
         //
+        $personas=Personas::all();
         $horarios = Horarios::all();
-        return view("eventos.personal", compact('horarios'));
+        return view("eventos.personal", compact('horarios','personas'));
     }
 
     /**
