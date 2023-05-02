@@ -80,15 +80,16 @@
                     @method('PATCH')
                    
                     <div class="form-group">
-                    <input type="hidden" name="horario_id" value="{{ $horario->id }}">
-
+                      <input type="hidden" name="horario_id" value="{{ $horario->id }}">
                       <label for="nombre{{$persona->id}}">Nombre Encargada</label>
                       <input type="text" class="form-control" id="nombre{{$persona->id}}" name="nombreCompleto" value="{{ $persona->nombreCompleto }}">
                     </div>
-                    <div class="form-group col-md-12">
-                            <label for="nombre">Telefono</label>
-                            <input type="text" class="form-control" id="telefono" name="telefono">
-                          </div>
+                      
+                    <div class="form-group ">
+                      <label for="nombre">Telefono</label>
+                      <input type="text" class="form-control" id="telefono" name="telefono">
+                    </div>
+
                     <div class="form row">
                       <div class="form-group col-md-4">
                         <label for="color{{$persona->id}}">Color</label>
@@ -96,13 +97,13 @@
                       </div>
                       
                       <div class="form-group col-md-4">
-  <label for="horarioInicio{{$horario->id}}">Inicio del horario</label>
-  <input type="time" class="form-control" id="horarioInicio{{$horario->id}}" name="horarioInicio" value="{{ date('H:i', strtotime($horario->horarioInicio)) }}">
-</div>
-<div class="form-group col-md-4">
-  <label for="horarioFinal{{$horario->id}}">Final del horario</label>
-  <input type="time" class="form-control" id="horarioFinal{{$horario->id}}" name="horarioFinal" value="{{ date('H:i', strtotime($horario->horarioFinal)) }}" >                      
-</div>
+                        <label for="horarioInicio{{$horario->id}}">Inicio del horario</label>
+                        <input type="time" class="form-control" id="horarioInicio{{$horario->id}}" name="horarioInicio" value="{{ date('H:i', strtotime($horario->horarioInicio)) }}">
+                      </div>
+                      <div class="form-group col-md-4">
+                        <label for="horarioFinal{{$horario->id}}">Final del horario</label>
+                        <input type="time" class="form-control" id="horarioFinal{{$horario->id}}" name="horarioFinal" value="{{ date('H:i', strtotime($horario->horarioFinal)) }}" >                      
+                      </div>
 
                     </div>
                     <div class="form-group">
