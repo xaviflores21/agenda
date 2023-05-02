@@ -17,7 +17,7 @@ class CreateDetallesPersonasTable extends Migration
             $table->string('nombreCompleto', 30);
             $table->string('horarios',255);
             $table->string('observacion')->nullable();
-
+            
             $table->foreign('personas_id')->references('id')->on('personas');
             $table->foreign('horarios_id')->references('id')->on('horarios');
 

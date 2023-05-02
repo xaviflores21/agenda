@@ -22,6 +22,7 @@ return new class extends Migration
             $table->boolean('viernes');
             $table->boolean('sabado');
             $table->boolean('domingo');
+            $table->char('estado',1);
             $table->timestamps();
         });
     }

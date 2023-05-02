@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\evento;
-use App\Models\personas;
+use App\Models\Personas;
 use Illuminate\Http\Request;
 
 class EventosController extends Controller
@@ -14,8 +14,10 @@ class EventosController extends Controller
     public function index()
     {
         //
-        $personas = Personas::all();
-        return view('eventos/index', compact('personas'));
+        $personas = Personas::where('estado', 'C')
+        ->orWhere('estado', 'M')
+        ->get();
+        return view('eventos.index', compact('personas'));
     }
     public function horariosIndex(){
         

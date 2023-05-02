@@ -71,9 +71,9 @@
             <input class="form-control" list="datalistOptions" id="txtTitle" name="txtTitle" placeholder="Seleccione persona a cargo...">
                 <datalist id="datalistOptions">
                 
-                @foreach($personas as $persona)
-                @if($persona->estado == 'C' || $persona->estado == 'M')
-                    <option value="{{ $persona->nombreCompleto }}" data-color="{{ $persona->color }}">
+                @foreach($personas as $personas)
+                @if($personas->estado == 'C' || $personas->estado == 'M')
+                    <option value="{{ $personas->nombreCompleto }}" data-color="{{ $personas->color }}">
                 @endif
                 @endforeach
 

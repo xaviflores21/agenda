@@ -22,6 +22,7 @@ return new class extends Migration
                 'viernes' => true,
                 'sabado' => false,
                 'domingo' => false,
+                'estado'=>'C',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
