@@ -86,8 +86,8 @@
                     </div>
                       
                     <div class="form-group ">
-                      <label for="nombre">Telefono</label>
-                      <input type="text" class="form-control" id="telefono" name="telefono">
+                      <label for="telefono{{$persona->id}}">Telefono</label>
+                      <input type="text" class="form-control" id="telefono{{$persona->id}}" name="telefono" value="{{$persona->telefono}}">
                     </div>
 
                     <div class="form row">

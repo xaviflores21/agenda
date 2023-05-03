@@ -19,7 +19,7 @@
           <option value="end">Fin</option>
           <option value="estado">Estado</option>
         </select>
-        <input type="text" class="form-control" placeholder="Search" name="search" style="width: 60%;">
+        <input type="text" class="form-control" placeholder="Buscar..." name="search" style="width: 60%;">
         <div class="input-group-append">
           <button class="btn btn-secondary" type="submit">
             <i class="fa fa-search"></i>Buscar
