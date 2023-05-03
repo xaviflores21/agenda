@@ -143,10 +143,16 @@
           @endforeach
 
 
-      
-          <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#agregarModal">Añadir</button>
-          <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#agregarHorarios">Agregar Horario</button>
           
+          <div class="d-flex justify-content-between">
+            <div class="d-flex justify-content-start">
+              <button class="btn btn-success me-2" data-bs-toggle="modal" data-bs-target="#agregarModal">Añadir</button>
+              <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#agregarHorarios">Agregar Horario</button>
+            </div>
+            <a href="{{url('/')}}" class="btn btn-success">Menu principal</a>
+          </div>
+
+      
 
     
           <script>
@@ -210,44 +216,62 @@
                             <select name="horario_id" class="form-control selectpicker" >
                               @foreach($horarios as $horario)
                               <option value="{{ $horario->id }}">{{ $horario->horarioInicio }} - {{ $horario->horarioFinal }} 
+                                @php $first = true; @endphp
                                 @if ($horario->lunes)
+                                @if ($first)
                                 &nbsp;&nbsp;&nbsp;LU
-                                @if ($horario->martes || $horario->miercoles || $horario->jueves || $horario->viernes || $horario->sabado || $horario->domingo)
-                                -
+                                @php $first = false; @endphp
+                                @else
+                                - LU
                                 @endif
                                 @endif
                                 @if ($horario->martes)
-                                MA
-                                @if ($horario->miercoles || $horario->jueves || $horario->viernes || $horario->sabado || $horario->domingo)
-                                -
+                                @if ($first)
+                                &nbsp;&nbsp;&nbsp;MA
+                                @php $first = false; @endphp
+                                @else
+                                - MA
                                 @endif
-                                @endif
+                                @endif                                
                                 @if ($horario->miercoles)
-                                MI
-                                @if ($horario->jueves || $horario->viernes || $horario->sabado || $horario->domingo)
-                                -
+                                @if ($first)
+                                &nbsp;&nbsp;&nbsp;MI
+                                @php $first = false; @endphp
+                                @else
+                                - MI
                                 @endif
                                 @endif
                                 @if ($horario->jueves)
-                                JU
-                                @if ($horario->viernes || $horario->sabado || $horario->domingo)
-                                -
+                                @if ($first)
+                                &nbsp;&nbsp;&nbsp;JU
+                                @php $first = false; @endphp
+                                @else
+                                - JU
                                 @endif
                                 @endif
                                 @if ($horario->viernes)
-                                VI
-                                @if ($horario->sabado || $horario->domingo)
-                                -
+                                @if ($first)
+                                &nbsp;&nbsp;&nbsp;VI
+                                @php $first = false; @endphp
+                                @else
+                                - VI
                                 @endif
                                 @endif
                                 @if ($horario->sabado)
-                                SA
-                                @if ($horario->domingo)
-                                -
+                                @if ($first)
+                                &nbsp;&nbsp;&nbsp;SA
+                                @php $first = false; @endphp
+                                @else
+                                - SA
                                 @endif
                                 @endif
                                 @if ($horario->domingo)
-                                DO
+                                @if ($first)
+                                &nbsp;&nbsp;&nbsp;DO
+                                @php $first = false; @endphp
+                                @else
+                                - DO
+                                @endif
                                 @endif
                               </option>
                               @endforeach
@@ -260,6 +284,7 @@
                         <div class="modal-footer">
                           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
                           <button type="submit" class="btn btn-primary" data-bs-dismiss="modal">Guardar cambios</button>
+                          
                         </div>
                       </form>
                     </div>

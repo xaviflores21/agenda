@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", function () {
     var calendarEl = document.getElementById("calendar");
     var calendar = new FullCalendar.Calendar(calendarEl, {
         plugins: ["dayGrid", "interaction", "timeGrid", "list"],
-
+        firstDay: 1,
         //defaultView:'timeGridDay-'   Alternador de modelos calendario
 
         header: {

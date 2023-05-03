@@ -23,6 +23,7 @@
 
 <script>
     let url_show="{{url('/personal/mostrarEventos')}}";
+    let url_menuPrincipal="{{url('/')}}";
 </script>
 
 <!-- LLamando al SCRIPT CALENDAR -->
@@ -30,7 +31,7 @@
     var calendarEl = document.getElementById("calendar");
     var calendar = new FullCalendar.Calendar(calendarEl, {
         plugins: ["dayGrid", "interaction", "timeGrid", "list"],
-
+        firstDay: 1,
         defaultView:'timeGridWeek',   //Alternador de modelos calendario
 
         header: {
@@ -46,9 +47,13 @@
         },
         customButtons: {
             Miboton: {
-                text: "Horarios",
+                text: "Menu Principal",
                 //Puedo agregar algo nuevo
+                click: function () {
+                    window.location.href = url_menuPrincipal;
+                },
             },
+          
         },
         dateClick: function (info) {
             console.log(info.event)
@@ -164,6 +169,9 @@
             $("#txtTelefono").val("");
     }
     console.log("{{url('/eventos')}}");
+    calendar.setOption("locale", "Es");
+    calendar.render();
+
 });
 console.log("Ejecutando desde el main.js");
 </script>

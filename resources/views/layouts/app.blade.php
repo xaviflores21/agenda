@@ -69,7 +69,7 @@
             <a class="nav-link" href="{{ route('reporte.index') }}">{{ __('Reporte') }}</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="{{ route('personas.index') }}">{{ __('Personal') }}</a>
+            <a class="nav-link" href="{{ route('personas.index') }}">{{ __('Registar personal') }}</a>
         </li>
         
         <!-- Modal -->

@@ -77,13 +77,14 @@
                             </div>
                         </div>
 
-                        <div class="row mb-0">
-                            <div class="col-md-6 offset-md-4">
-                                <button type="submit" class="btn btn-primary">
-                                    {{ __('Registrar') }}
-                                </button>
+                        <div class="d-flex justify-content-center">
+                            <div class="d-flex justify-content-start">
+                                <button type="submit" class="btn btn-primary me-2">{{ __('Registrar') }}</button>
+                                <a href="{{ url('/') }}" class="btn btn-danger">{{ __('Cancelar') }}</a>
                             </div>
                         </div>
+                           
+                            
                     </form>
                 </div>
             </div>

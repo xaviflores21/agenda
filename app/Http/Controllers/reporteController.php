@@ -50,30 +50,55 @@ class reporteController extends Controller
         $sort = $request->input('sort');
     
         // Determine the column to sort by based on the sort parameter
-        switch ($sort) {
-            case 'userNombre':
-            case 'encargadaEvento':
-            case  'idEvento':
-            case 'cliente':
-            case 'habitacion':
-            case 'servicio':
-            case 'estado':
-                $query->orderBy($sort);
-                break;
-            case 'start':
-            case 'end':
-                $query->orderBy($sort, 'desc');
-                break;
-            default:
-                $query->orderBy('id');
-                break;
-        }
+     
+      switch ($sort) {
+        case 'id':
+            $query->orderBy('id', $request->input('sort_direction', 'asc'));
+            break;
+        case 'userNombre':
+            $query->orderBy('userNombre', $request->input('sort_direction', 'asc'));
+            break;
+        case 'idEvento':
+            $query->orderBy('idEvento', $request->input('sort_direction', 'asc'));
+            break;
+        case 'encargadaEvento':
+            $query->orderBy('encargadaEvento', $request->input('sort_direction', 'asc'));
+            break;
+        case 'cliente':
+            $query->orderBy('cliente', $request->input('sort_direction', 'asc'));
+            break;
+        case 'habitacion':
+            $query->orderBy('habitacion', $request->input('sort_direction', 'asc'));
+            break;
+        case 'servicio':
+            $query->orderBy('servicio', $request->input('sort_direction', 'asc'));
+            break;
+        case 'start':
+            $query->orderBy('start', $request->input('sort_direction', 'asc'));
+            break;
+        case 'end':
+            $query->orderBy('end', $request->input('sort_direction', 'asc'));
+            break;
+        case 'estado':
+            $query->orderBy('estado', $request->input('sort_direction', 'asc'));
+            break;
+        default:
+            $query->orderBy('id', $request->input('sort_direction', 'asc'));
+            break;
+    }
+    
+
+    $sortDirection = $request->input('sort_direction', 'asc');
+    if (!empty($sort)) {
+        $query->orderBy($sort, $sortDirection);
+    }
+    
     
         // Get the results
         $reportes = $query->get();
     
         // Return the data to the view
-        return view('eventos.reporte', compact('reportes'));
+        return view('eventos.reporte', compact('reportes','sort','sortDirection'));
     }
     
     /**
