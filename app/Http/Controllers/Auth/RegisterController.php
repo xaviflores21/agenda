@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Gate;
 use App\Providers\RouteServiceProvider;
 use App\Models\User;
+use App\Models\ReporteUsuarios;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -30,8 +31,11 @@ class RegisterController extends Controller
     use RegistersUsers;
     protected function registered(Request $request, $user)
     {
-        Auth::logout();
+     /*   Auth::logout();
         return redirect()->route('login')->with('success', 'Registration successful. Please log in to continue.');
+        Estas lineas de arriba son para cuando un registro sea exitoso vuelve a la pagina principal
+        */
+        return redirect('/');
     }
     /**
      * Where to redirect users after registration.
@@ -73,37 +77,60 @@ class RegisterController extends Controller
      * @return \App\Models\User
      */
     protected function create(array $data)
-    {
-        // Check if there is already an admin user
-        $adminCount = User::where('role', 'admin')->count();
-    
-        if ($adminCount > 0 && $data['role'] === 'admin') {
-            throw ValidationException::withMessages(['role' => 'Only one admin is allowed']);
-        }
-    
-        // If there is no admin user, allow registration
-        if ($adminCount === 0) {
-            return User::create([
-                'name' => $data['name'],
-                'email' => $data['email'],
-                'password' => Hash::make($data['password']),
-                'role' => $data['role']
-            ]);
-        }
-    
-        // If there is an admin user, check if the current user is an admin
-        $user = Auth::user();
-        if (!$user || (!$user->isAdmin() && !$user->esJefeDeArea())) {
-            abort(403, 'Unauthorized action.');
-        }
-    
-        return User::create([
+{
+    // Check if there is already an admin user
+    $adminCount = User::where('role', 'admin')->count();
+
+    if ($adminCount > 0 && $data['role'] === 'admin') {
+        throw ValidationException::withMessages(['role' => 'Only one admin is allowed']);
+    }
+
+    // If there is no admin user, allow registration
+    if ($adminCount === 0) {
+        $user = User::create([
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
             'role' => $data['role']
         ]);
+        
+        // Create a new reporteUsuario entry
+        $ReporteUsuarios = new ReporteUsuarios();
+        $ReporteUsuarios->usuario_id = $user->id;
+        $ReporteUsuarios->usuario = $user->name;
+        $ReporteUsuarios->email = $user->email;
+        $ReporteUsuarios->rol = $user->role;
+        $ReporteUsuarios->estado='C';
+        $ReporteUsuarios->save();
+
+        return $user;
     }
+
+    // If there is an admin user, check if the current user is an admin
+    $user = Auth::user();
+    if (!$user || (!$user->isAdmin() && !$user->esJefeDeArea())) {
+        abort(403, 'Unauthorized action.');
+    }
+
+    $newUser = User::create([
+        'name' => $data['name'],
+        'email' => $data['email'],
+        'password' => Hash::make($data['password']),
+        'role' => $data['role']
+    ]);
+    
+    // Create a new reporteUsuario entry
+    $ReporteUsuarios = new ReporteUsuarios();
+    $ReporteUsuarios->usuario_id = $newUser->id;
+    $ReporteUsuarios->usuario = $newUser->name;
+    $ReporteUsuarios->email = $newUser->email;
+    $ReporteUsuarios->rol = $newUser->role;
+    $ReporteUsuarios->estado='C';
+    $ReporteUsuarios->save();
+
+    return $user;
+}
+
     
     
     

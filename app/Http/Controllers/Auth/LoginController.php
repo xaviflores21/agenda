@@ -40,11 +40,12 @@ class LoginController extends Controller
     }
     protected function redirectTo()
     {
+        //MIRAR BIEN ESTE REDIRECCONTROLLER PARA MODIFICAR LAS PAGINAS DONDE SE REDIRRECCIONE
         $user = Auth::user();
         if ($user->role == 'admin') {
-            return '/admin/dashboard'; // Replace this with your admin dashboard route
+            return '/'; // Replace this with your admin dashboard route
         } elseif ($user->role == 'boss') {
-            return '/boss/dashboard'; // Replace this with your boss dashboard route
+            return '/'; // Replace this with your boss dashboard route
         } else {
             return '/';
         }

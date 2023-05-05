@@ -19,6 +19,7 @@ class Horarios extends Model
         'viernes',
         'sabado',
         'domingo',
+        'estado',
     ];
 
     public function personas()

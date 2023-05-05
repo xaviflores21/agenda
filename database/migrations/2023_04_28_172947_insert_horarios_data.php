@@ -32,7 +32,7 @@ return new class extends Migration
     
     public function down()
     {
-        DB::table('horarios')->delete();
+
     }
     
     
