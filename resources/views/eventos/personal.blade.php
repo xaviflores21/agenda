@@ -485,11 +485,12 @@
 </div>
 </div>
 </div>
-@endsection
+
 
 <!-- Modificar Horarios -->
 
 
+<!-- Modal with dropdown -->
 <!-- Modal with dropdown -->
 <div class="modal fade" id="updateHorarioModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
@@ -501,15 +502,16 @@
         </button>
       </div>
       <div class="modal-body">
-        <form>
-          <select class="form-control" id="horarioSelect" name="horario_id" onchange="updateCheckbox();updateHorario();">
-          <option value="">Select Horario ID</option>
+        <form id="updateHorarioForm" action="{{ route('horarios.updateHorarios') }}" method="POST">
+          @csrf
+          @method('PATCH')
+          <select class="form-control" id="horarioSelect" name="horario_id">
+            <option value="">Select Horario ID</option>
             @foreach($horarioModificacion as $horario)
-            <option value="{{ $horario->id }}" data-lunes="{{ $horario->lunes }}" data-martes="{{ $horario->martes }} " data-miercoles="{{ $horario->miercoles }} " data-jueves="{{ $horario->jueves }} " data-viernes="{{ $horario->viernes }} " data-sabado="{{ $horario->sabado }}" data-domingo="{{ $horario->domingo }}" data-horarioinicio="{{ $horario->horarioInicio }}" data-horariofinal="{{ $horario->horarioFinal }}">{{ $horario->id }}</option>
+            <option value="{{ $horario->id }}" data-lunes="{{ $horario->lunes }}" data-martes="{{ $horario->martes }}" data-miercoles="{{ $horario->miercoles }}" data-jueves="{{ $horario->jueves }}" data-viernes="{{ $horario->viernes }}" data-sabado="{{ $horario->sabado }}" data-domingo="{{ $horario->domingo }}" data-horarioinicio="{{ $horario->horarioInicio }}" data-horariofinal="{{ $horario->horarioFinal }}">{{ $horario->id }}</option>
             @endforeach
           </select>
           <br>
-          <label for="">Dias de la semana</label>
           <div class="form-check">
             <input class="form-check-input" type="checkbox" id="lunesCheckbox" name="lunes" value="1" data-checked="{{ $horario->lunes }}">
             <label class="form-check-label" for="lunesCheckbox">Lunes</label>
@@ -539,51 +541,61 @@
             <label class="form-check-label" for="domingoCheckbox">Domingo</label>
           </div>
           <div class="form-group col-md-4">
-            <label for="horarioInicio">Inicio del horario</label>
-            <input type="time" class="form-control" id="horarioInicio" name="horarioInicio" required>
+            <label >Inicio del horario</label>
+            <input type="time" min="07:00" max="23:00" steps="600" class="form-control" name="horarioInicio" id="horarioInicio">
           </div>
           <div class="form-group col-md-4">
             <label for="horarioFinal">Final del horario</label>
-            <input type="time" class="form-control" id="horarioFinal" name="horarioFinal" required>
+            <input type="time" min="07:00" max="23:00" steps="600" class="form-control" name="horarioFinal" id="horarioFinal">
+          </div>
+         <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="submit" id="iasduhaus" class="btn btn-primary"  data-bs-dismiss="modal">Save changes</button>
           </div>
         </form>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary"  data-bs-dismiss="modal">Save changes</button>
       </div>
     </div>
   </div>
 </div>
 
 <script>
-function updateCheckbox() {
-  var selectedOption = document.getElementById("horarioSelect").selectedOptions[0];
-  var lunesValue = selectedOption.getAttribute("data-lunes");
-  document.getElementById("lunesCheckbox").checked = (lunesValue == 1);
-  var martesValue = selectedOption.getAttribute("data-martes");
-  document.getElementById("martesCheckbox").checked = (martesValue == 1);
-  var miercolesValue = selectedOption.getAttribute("data-miercoles");
-  document.getElementById("miercolesCheckbox").checked = (miercolesValue == 1);
-  var juevesValue = selectedOption.getAttribute("data-jueves");
-  document.getElementById("juevesCheckbox").checked = (juevesValue == 1);
-  var viernesValue = selectedOption.getAttribute("data-viernes");
-  document.getElementById("viernesCheckbox").checked = (viernesValue == 1);
-  var sabadoValue = selectedOption.getAttribute("data-sabado");
-  document.getElementById("sabadoCheckbox").checked = (sabadoValue == 1);
-  var domingoValue = selectedOption.getAttribute("data-domingo");
-  document.getElementById("domingoCheckbox").checked = (domingoValue == 1);
- 
-
-}
-function updateHorario() {
-  var selectedOption = document.getElementById("horarioSelect").options[document.getElementById("horarioSelect").selectedIndex];
-  var horarioInicio = selectedOption.getAttribute("data-horarioinicio");
-  var horarioFinal = selectedOption.getAttribute("data-horariofinal");
-  document.getElementById("horarioInicio").value = horarioInicio;
-  document.getElementById("horarioFinal").value = horarioFinal;
-}
+    $(document).ready(function() {
+        // Listen for the change event on the dropdown menu
+        $('#horarioSelect').change(function() {
+            var selectedId = $(this).val();
+            
+            // Update the modal fields based on the selected ID
+            if (selectedId) {
+                var selectedOption = $(this).find('option:selected');
+                var horarioInicio = selectedOption.data('horarioinicio');
+            var formattedHorarioInicio = horarioInicio.substring(0, 5); // Extract the first 5 characters (HH:mm)
+            
+            console.log("Esto esta en el ##" + formattedHorarioInicio);
+                $('#lunesCheckbox').prop('checked', selectedOption.data('lunes'));
+                $('#martesCheckbox').prop('checked', selectedOption.data('martes'));
+                $('#miercolesCheckbox').prop('checked', selectedOption.data('miercoles'));
+                $('#juevesCheckbox').prop('checked', selectedOption.data('jueves'));
+                $('#viernesCheckbox').prop('checked', selectedOption.data('viernes'));
+                $('#sabadoCheckbox').prop('checked', selectedOption.data('sabado'));
+                $('#domingoCheckbox').prop('checked', selectedOption.data('domingo'));
+                $('#horarioInicio').val(formattedHorarioInicio);
+                $('#horarioFinal').val(selectedOption.data('horariofinal'));
+            } else {
+                // Clear the modal fields if no ID is selected
+                $('#lunesCheckbox').prop('checked', false);
+                $('#martesCheckbox').prop('checked', false);
+                $('#miercolesCheckbox').prop('checked', false);
+                $('#juevesCheckbox').prop('checked', false);
+                $('#viernesCheckbox').prop('checked', false);
+                $('#sabadoCheckbox').prop('checked', false);
+                $('#domingoCheckbox').prop('checked', false);
+                $('#horarioInicio').val('');
+                $('#horarioFinal').val('');
+            }
+        });
+    });
 </script>
+@endsection
 
 
 

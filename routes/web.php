@@ -39,9 +39,9 @@ Route::middleware(['auth', 'esJefeDeArea'])->group(function () {
     Route::resource('reporteHorario','App\Http\Controllers\ReporteHorarioController');
     Route::get('horariosMuestra', 'App\Http\Controllers\PersonasController@horariosIndex')->name('horarios');
     Route::post('horarios/addHorarios', [App\Http\Controllers\PersonasController::class, 'addHorario'])->name('horarios.add');
+    Route::patch('horarios/updateHorarios',[App\Http\Controllers\PersonasController::class, 'updateHorarios'])->name('horarios.updateHorarios');
    
     Route::delete('/horarios/{id}', [App\Http\Controllers\PersonasController::class, 'destroyHorario'])->name('horarios.destroyHorario');
-    Route::patch('/horarios/{horario_id}',[App\Http\Controllers\PersonasController::class, 'updateHorarios'])->name('horarios.updateHorarios');
 
 
 });

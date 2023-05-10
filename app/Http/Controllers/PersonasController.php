@@ -314,9 +314,10 @@ public function destroyHorario(Request $request)
     return redirect()->back()->with('success', 'Record deleted successfully.');
 }
 
-public function updateHorarios(Request $request, $id)
+public function updateHorarios(Request $request)
 {
     $validatedData = $request->validate([
+        'horario_id' => 'required|exists:horarios,id',
         'horarioInicio' => 'required|date_format:H:i',
         'horarioFinal' => 'required|date_format:H:i|after:horarioInicio',
         'lunes' => 'nullable|boolean',
@@ -327,7 +328,14 @@ public function updateHorarios(Request $request, $id)
         'sabado' => 'nullable|boolean',
         'domingo' => 'nullable|boolean'
     ]);
-    $horario = Horario::findOrFail($id); // Find the horario with the given id
+    
+    $horarioID = $request->input('horario_id');
+    $horario = Horarios::find($horarioID);
+    
+    if (!$horario) {
+        // Handle the case where the horario is not found
+        return redirect()->back()->with('error', 'Horario not found');
+    }
     
     // Update the fields in the horario object with the new values from the request
     $horario->horarioInicio = $validatedData['horarioInicio'];
@@ -338,15 +346,16 @@ public function updateHorarios(Request $request, $id)
     $horario->jueves = $request->has('jueves') ? 1 : 0;
     $horario->viernes = $request->has('viernes') ? 1 : 0;
     $horario->sabado = $request->has('sabado') ? 1 : 0;
-    $horario->domingo = $request->has('domingo') ? 1 : 0;   
-    $horario->estado="M";
+    $horario->domingo = $request->has('domingo') ? 1 : 0;
+    $horario->estado = "M";
     
     // Save the changes to the database
     $horario->save();
     
     // Return a success message to the user
-    return response()->json(['message' => 'Horario updated successfully']);
+    return redirect()->back()->with('success', 'Horario updated successfully');
 }
+
 
 
 }
