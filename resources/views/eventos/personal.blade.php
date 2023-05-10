@@ -508,7 +508,64 @@
           <select class="form-control" id="horarioSelect" name="horario_id">
             <option value="">Select Horario ID</option>
             @foreach($horarioModificacion as $horario)
-            <option value="{{ $horario->id }}" data-lunes="{{ $horario->lunes }}" data-martes="{{ $horario->martes }}" data-miercoles="{{ $horario->miercoles }}" data-jueves="{{ $horario->jueves }}" data-viernes="{{ $horario->viernes }}" data-sabado="{{ $horario->sabado }}" data-domingo="{{ $horario->domingo }}" data-horarioinicio="{{ $horario->horarioInicio }}" data-horariofinal="{{ $horario->horarioFinal }}">{{ $horario->id }}</option>
+            <option value="{{ $horario->id }}" data-lunes="{{ $horario->lunes }}" data-martes="{{ $horario->martes }}" data-miercoles="{{ $horario->miercoles }}" data-jueves="{{ $horario->jueves }}" data-viernes="{{ $horario->viernes }}" data-sabado="{{ $horario->sabado }}" data-domingo="{{ $horario->domingo }}" data-horarioinicio="{{ $horario->horarioInicio }}" data-horariofinal="{{ $horario->horarioFinal }}">{{ $horario->horarioInicio }} - {{ $horario->horarioFinal }} 
+                                @php $first = true; @endphp
+                                @if ($horario->lunes)
+                                @if ($first)
+                                &nbsp;&nbsp;&nbsp;LU
+                                @php $first = false; @endphp
+                                @else
+                                - LU
+                                @endif
+                                @endif
+                                @if ($horario->martes)
+                                @if ($first)
+                                &nbsp;&nbsp;&nbsp;MA
+                                @php $first = false; @endphp
+                                @else
+                                - MA
+                                @endif
+                                @endif                                
+                                @if ($horario->miercoles)
+                                @if ($first)
+                                &nbsp;&nbsp;&nbsp;MI
+                                @php $first = false; @endphp
+                                @else
+                                - MI
+                                @endif
+                                @endif
+                                @if ($horario->jueves)
+                                @if ($first)
+                                &nbsp;&nbsp;&nbsp;JU
+                                @php $first = false; @endphp
+                                @else
+                                - JU
+                                @endif
+                                @endif
+                                @if ($horario->viernes)
+                                @if ($first)
+                                &nbsp;&nbsp;&nbsp;VI
+                                @php $first = false; @endphp
+                                @else
+                                - VI
+                                @endif
+                                @endif
+                                @if ($horario->sabado)
+                                @if ($first)
+                                &nbsp;&nbsp;&nbsp;SA
+                                @php $first = false; @endphp
+                                @else
+                                - SA
+                                @endif
+                                @endif
+                                @if ($horario->domingo)
+                                @if ($first)
+                                &nbsp;&nbsp;&nbsp;DO
+                                @php $first = false; @endphp
+                                @else
+                                - DO
+                                @endif
+                                @endif</option>
             @endforeach
           </select>
           <br>

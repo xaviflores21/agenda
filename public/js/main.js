@@ -16,7 +16,7 @@ document.addEventListener("DOMContentLoaded", function () {
             week: "Semana",
             month: "Mes",
         },
-        customButtons: {
+        /*customButtons: {
             Miboton: {
                 text: "Horarios",
                 click: function () {
@@ -24,7 +24,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     window.location.href = routes["horarios"];
                 },
             },
-        },
+        },*/
         dateClick: function (info) {
             if (
                 info.view.type === "timeGridWeek" ||
