@@ -151,7 +151,7 @@
         <button id="btnEliminar" class="btn btn-danger">Borrar</button>
         @endif
         
-        <button id="btnCancelar" data-bs-dismiss="modal" class="btn btn-default">Cancelar</button>
+        <button id="btnCancelar" class="btn btn-default">Cancelar</button>
       
         </div>
       </div>

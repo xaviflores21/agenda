@@ -192,6 +192,14 @@ document.addEventListener("DOMContentLoaded", function () {
         EnviarReporteInformacion(ObjEvento, estado);
     });
 
+    $("#btnCancelar").click(function () {
+        ObjEvento = recolectarDatosGUI("PATCH");
+        ObjEvento.color = "#ff0000";
+        EnviarInformacion("/" + $("#txtID").val(), ObjEvento);
+        estado = "M";
+        EnviarReporteInformacion(ObjEvento, estado);
+    });
+
     function recolectarDatosGUI(method) {
         let endValue = $("#txtHoraEventoTerminado").val();
         if (endValue == null || endValue == "00:00") {
