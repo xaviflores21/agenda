@@ -209,9 +209,9 @@ public function horariosIndex()
     $personas = Personas::where('estado', 'C')->orWhere('estado', 'M')->get();
     $events = [];
 
-    $nextSunday = Carbon::now()->startOfWeek(Carbon::SUNDAY);
+    $nextSunday = Carbon::now()->startOfWeek(Carbon::MONDAY);
     info($nextSunday);
-    $nextSaturday = Carbon::now()->next(Carbon::SATURDAY);
+    $nextSaturday = Carbon::now()->next(Carbon::SUNDAY);
     info($nextSaturday);
 
     for ($date = $nextSunday; $date <= $nextSaturday; $date->addDay()) {
