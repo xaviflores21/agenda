@@ -206,36 +206,50 @@ public function horariosIndex()
     }
     public function mostrarEventos()
 {   
-    
     $personas = Personas::where('estado', 'C')->orWhere('estado', 'M')->get();
-
     $events = [];
 
     $nextSunday = Carbon::now()->startOfWeek(Carbon::SUNDAY);
     info($nextSunday);
-    $nextSaturday =Carbon::now()->next(Carbon::SATURDAY);
-
+    $nextSaturday = Carbon::now()->next(Carbon::SATURDAY);
     info($nextSaturday);
-    
-        for ($date = $nextSunday; $date <= $nextSaturday; $date->addDay()) {
-            foreach ($personas as $persona) {
-                $event = [
-                'title' => $persona->nombreCompleto,
-                'start' => $date->copy()->format('Y-m-d').' '.$persona->horarioInicio,
-                'end' => $date->copy()->format('Y-m-d').' '.$persona->horarioFinal,
-                'color' => $persona->color,
-                ];
 
-                $events[] = $event;
+    for ($date = $nextSunday; $date <= $nextSaturday; $date->addDay()) {
+        foreach ($personas as $persona) {
+            if ($persona->horarios->count() > 0) {
+                foreach ($persona->horarios as $horario) {
+                    if ($horario->estado !== 'E') {
+                        $event = [
+                            'title' => $persona->nombreCompleto,
+                            'start' => $date->copy()->format('Y-m-d').' '.$horario->horarioInicio,
+                            'end' => $date->copy()->format('Y-m-d').' '.$horario->horarioFinal,
+                            'color' => $persona->color,
+                        ];
+
+                        // Check if the event should be included based on the day of the week
+                        $dayOfWeek = $date->dayOfWeekIso; // 1 (Monday) to 7 (Sunday)
+                        if (($dayOfWeek === 1 && $horario->lunes) ||
+                            ($dayOfWeek === 2 && $horario->martes) ||
+                            ($dayOfWeek === 3 && $horario->miercoles) ||
+                            ($dayOfWeek === 4 && $horario->jueves) ||
+                            ($dayOfWeek === 5 && $horario->viernes) ||
+                            ($dayOfWeek === 6 && $horario->sabado) ||
+                            ($dayOfWeek === 7 && $horario->domingo)) {
+                            $events[] = $event;
+                        }
+                    }
+                }
             }
         }
-        $nextSunday->addWeek();
-        $nextSaturday->addWeek();
-    
+    }
 
+    $nextSunday->addWeek();
+    $nextSaturday->addWeek();
 
     return response()->json($events);
 }
+
+    
 public function addHorario(Request $request)
 {
     $validatedData = $request->validate([
@@ -317,7 +331,6 @@ public function destroyHorario(Request $request)
 public function updateHorarios(Request $request)
 {
     $validatedData = $request->validate([
-        'horario_id' => 'required|exists:horarios,id',
         'horarioInicio' => 'required|date_format:H:i',
         'horarioFinal' => 'required|date_format:H:i|after:horarioInicio',
         'lunes' => 'nullable|boolean',
@@ -352,6 +365,20 @@ public function updateHorarios(Request $request)
     // Save the changes to the database
     $horario->save();
     
+    
+    $newHorario = new ReporteHorario();
+    $newHorario->idHorarios = $horarioID;
+    $newHorario->horarioInicio = $horario->horarioInicio;
+    $newHorario->horarioFinal = $horario->horarioFinal;
+    $newHorario->lunes = $horario->lunes;
+    $newHorario->martes = $horario->martes;
+    $newHorario->miercoles = $horario->miercoles;
+    $newHorario->jueves = $horario->jueves;
+    $newHorario->viernes = $horario->viernes;
+    $newHorario->sabado = $horario->sabado;
+    $newHorario->domingo = $horario->domingo;
+    $newHorario->estadoHorarios = 'M';
+    $newHorario->save();
     // Return a success message to the user
     return redirect()->back()->with('success', 'Horario updated successfully');
 }

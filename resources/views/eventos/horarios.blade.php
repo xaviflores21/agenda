@@ -24,6 +24,7 @@
 <script>
     let url_show="{{url('/personal/mostrarEventos')}}";
     let url_menuPrincipal="{{url('/')}}";
+   
 </script>
 
 <!-- LLamando al SCRIPT CALENDAR -->
@@ -143,12 +144,38 @@
         },
         events:url_show  ,
         eventRender: function (info) {
-            // Access the event object and retrieve the additional field
-            //TOOLTIPS
+  // Access the event object and retrieve the additional field
+  // TOOLTIPS
+  var event = info.event;
 
-     
-        
-        },
+  // Create a new span element to wrap the fc-title contents and apply rotation
+  var titleWrapper = document.createElement("span");
+  titleWrapper.style.writingMode = "vertical-lr";
+  titleWrapper.style.transform = "rotate(180deg)";
+  titleWrapper.style.display = "inline-block";
+
+  // Clone the fc-title element and append it to the wrapper
+  var titleElement = info.el.querySelector(".fc-title").cloneNode(true);
+  titleElement.style.fontWeight = "bold";
+  titleElement.style.fontSize = "larger";
+  titleWrapper.appendChild(titleElement);
+
+  // Clear the existing contents of fc-title
+  info.el.querySelector(".fc-title").innerHTML = "";
+
+  // Append the wrapper with the rotated title to the event element
+  info.el.querySelector(".fc-title").appendChild(titleWrapper);
+
+  // Remove start and end time from rendering
+  var timeElement = info.el.querySelector('.fc-time');
+      if (timeElement) {
+        timeElement.remove();
+      }
+
+  // ... Rest of your code
+},
+
+
         //
     });
     calendar.setOption("locale", "Es");
