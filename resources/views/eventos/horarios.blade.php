@@ -153,6 +153,7 @@
   titleWrapper.style.writingMode = "vertical-lr";
   titleWrapper.style.transform = "rotate(180deg)";
   titleWrapper.style.display = "inline-block";
+  titleWrapper.style.marginTop = "10px";
 
   // Clone the fc-title element and append it to the wrapper
   var titleElement = info.el.querySelector(".fc-title").cloneNode(true);
@@ -178,8 +179,7 @@
 
         //
     });
-    calendar.setOption("locale", "Es");
-    calendar.render();
+   
 
     
 

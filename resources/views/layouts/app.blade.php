@@ -40,6 +40,12 @@
                                         {{ Auth::user()->name }}
                                     </a>
                                     <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                                        <a class="dropdown-item" href="{{ route('usuariosTable.index') }}">{{ __('Gestor de usuarios') }}</a>
+                                        @auth
+                                        @if(in_array(Auth::user()->role, ['admin', 'Jefe de area']))
+                                        @if (Route::currentRouteName() != 'login')
+                                        <a class="dropdown-item" href="{{ route('register') }}">{{ __('Registrar') }}</a>
+                                        @endif
                                         <a class="dropdown-item" href="{{ route('logout') }}"
                                         onclick="event.preventDefault();
                                         document.getElementById('logout-form').submit();">
@@ -48,16 +54,9 @@
                                         <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
                                             @csrf
                                         </form>
-                                        <a class="dropdown-item" href="{{ route('usuariosTable.index') }}">{{ __('Gestor de usuarios') }}</a>
                                     </div>
                                 </li>
-                                @auth
-                                @if(in_array(Auth::user()->role, ['admin', 'Jefe de area']))
-                                @if (Route::currentRouteName() != 'login')
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('register') }}">{{ __('Registrar') }}</a>
-                                </li>
-                                @endif
+                              
                                 <!-- Reporte LINK -->
                                 <li class="nav-item dropdown">
                                     <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>{{ __('Reporte') }}</a>
