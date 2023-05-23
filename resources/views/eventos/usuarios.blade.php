@@ -88,12 +88,14 @@
       <td>{{ $reporte->email }}</td>
       <td>{{ $reporte->role }}</td>
       <td>
+      @if(in_array(Auth::user()->role, ['admin']))
               <button class="btn btn-primary" id="submitButton" data-bs-toggle="modal" data-bs-target="#editModal{{$reporte->id}}" data-id="{{ $reporte->id }}" data-usuario_id="{{ $reporte->id }}" data-usuario="{{ $reporte->name }}" data-email="{{ $reporte->email }}" data-rol="{{ $reporte->role }}" >Modificar</button>
               <form action="{{ route('usuariosTable.destroy', $reporte->id) }}" method="POST" style="display: inline-block;">
                 @csrf
                 @method('DELETE')
                 <button type="submit" class="btn btn-danger">Borrar</button>
               </form>
+              @endif
         </td>
     </tr>
     <!-- MODAL MODIFICADR -->
